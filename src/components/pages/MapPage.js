@@ -1,19 +1,59 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiMapPin, FiSearch, FiNavigation, FiCoffee, FiBook, FiShoppingBag, FiHome, FiTruck } from 'react-icons/fi';
+import { FiMapPin, FiSearch, FiNavigation, FiCoffee, FiBook, FiShoppingBag, FiHome, FiTruck, FiX } from 'react-icons/fi';
+import PlaceDetailPage from './PlaceDetailPage';
+import RouteSearchModal from './RouteSearchModal';
+import InlineRouteGuidance from './InlineRouteGuidance';
 
 const MapContainer = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: ${props => props.darkMode ? '#1a1a1a' : '#f5f5f5'};
   padding-bottom: 100px; /* Extra space for bottom navigation */
 `;
 
 const Header = styled.div`
-  background: linear-gradient(135deg, #00A86B 0%, #20B2AA 100%);
-  padding: 60px 20px 20px;
+  background: ${props => props.darkMode ? '#2d3748' : 'linear-gradient(135deg, #00A86B 0%, #20B2AA 100%)'};
+  padding: 20px;
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const HeaderTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  
+  .title {
+    font-size: 24px;
+    font-weight: 700;
+  }
+`;
+
+const RouteToggle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: ${props => props.active ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'};
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
 `;
 
 const Title = styled.h1`
@@ -89,7 +129,7 @@ const ContentArea = styled.div`
 const MapView = styled.div`
   background: white;
   border-radius: 16px;
-  height: 300px;
+  height: ${props => props.expanded ? '500px' : '300px'};
   margin-bottom: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   position: relative;
@@ -103,6 +143,7 @@ const MapView = styled.div`
     radial-gradient(circle at 50% 50%, #00A86B 1px, transparent 1px);
   background-size: 50px 50px, 60px 60px, 30px 30px;
   background-color: #f8f9fa;
+  transition: all 0.5s ease;
 `;
 
 const MapPlaceholder = styled.div`
@@ -133,16 +174,17 @@ const LocationList = styled.div`
 `;
 
 const LocationCard = styled(motion.div)`
-  background: white;
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, ${props => props.darkMode ? '0.3' : '0.08'});
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#f0f0f0'};
   cursor: pointer;
   transition: all 0.3s ease;
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, ${props => props.darkMode ? '0.4' : '0.12'});
   }
 `;
 
@@ -173,13 +215,13 @@ const LocationInfo = styled.div`
     h4 {
       font-size: 16px;
       font-weight: 600;
-      color: #333;
+      color: ${props => props.darkMode ? '#fff' : '#333'};
       margin-bottom: 4px;
     }
     
     p {
       font-size: 12px;
-      color: #666;
+      color: ${props => props.darkMode ? '#aaa' : '#666'};
     }
   }
 `;
@@ -197,7 +239,7 @@ const LocationDescription = styled.div`
   margin-bottom: 12px;
   
   p {
-    color: #666;
+    color: ${props => props.darkMode ? '#ccc' : '#666'};
     font-size: 14px;
     line-height: 1.5;
   }
@@ -227,115 +269,301 @@ const LocationActions = styled.div`
 `;
 
 const ActionButton = styled.button`
-  flex: 1;
-  padding: 8px 12px;
-  background: ${props => props.primary ? '#00A86B' : '#f8f9fa'};
-  color: ${props => props.primary ? 'white' : '#666'};
-  border: none;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: ${props => props.primary ? '#008a5a' : '#e9ecef'};
-  }
+padding: 8px 16px;
+border: none;
+border-radius: 8px;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+background: ${props => props.primary ? '#00A86B' : '#f8f9fa'};
+color: ${props => props.primary ? 'white' : '#333'};
+
+&:hover {
+  background: ${props => props.primary ? '#008a5a' : '#e9ecef'};
+}
 `;
 
-const MapPage = ({ user }) => {
-  const [activeCategory, setActiveCategory] = useState('全て');
+const RouteSearchButton = styled.button`
+width: 100%;
+padding: 16px;
+background: ${props => props.active ? '#ff4757' : '#00A86B'};
+color: white;
+border: none;
+border-radius: 12px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-bottom: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+
+&:hover {
+  background: ${props => props.active ? '#ff3838' : '#008f5a'};
+  transform: translateY(-2px);
+}
+`;
+
+const RouteInfoSection = styled(motion.div)`
+background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+border-radius: 16px;
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 2px 12px rgba(0, 0, 0, ${props => props.darkMode ? '0.3' : '0.08'});
+border: 1px solid ${props => props.darkMode ? '#404040' : '#f0f0f0'};
+`;
+
+const SectionTitle = styled.h3`
+font-size: 18px;
+font-weight: 700;
+color: ${props => props.darkMode ? '#fff' : '#333'};
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 8px;
+`;
+
+const TransportInfo = styled.div`
+display: grid;
+gap: 12px;
+margin-bottom: 16px;
+`;
+
+const TransportCard = styled.div`
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px;
+background: #f8f9fa;
+border-radius: 12px;
+
+.icon {
+  width: 40px;
+  height: 40px;
+  background: ${props => props.color || '#00A86B'};
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.info {
+  flex: 1;
+
+  .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: ${props => props.darkMode ? '#fff' : '#333'};
+    margin-bottom: 4px;
+  }
+
+  .detail {
+    font-size: 12px;
+    color: ${props => props.darkMode ? '#aaa' : '#666'};
+  }
+}
+
+.status {
+  font-size: 12px;
+  color: #00A86B;
+  font-weight: 600;
+}
+`;
+
+const MapPage = ({ darkMode = false }) => {
+  const [showRouteSearch, setShowRouteSearch] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [currentView, setCurrentView] = useState('map');
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [showInlineGuidance, setShowInlineGuidance] = useState(false);
+  const [isRouteMode, setIsRouteMode] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
-    { id: '全て', label: '全て', icon: FiMapPin },
-    { id: '学習', label: '学習', icon: FiBook },
-    { id: '食堂', label: '食堂', icon: FiCoffee },
-    { id: '便利施設', label: '便利施設', icon: FiShoppingBag },
-    { id: '寄宿舎', label: '寄宿舎', icon: FiHome },
-    { id: '交通', label: '交通', icon: FiTruck }
+    { id: 'all', name: '全て', icon: FiHome },
+    { id: 'cafe', name: 'カフェ', icon: FiCoffee },
+    { id: 'library', name: '図書館', icon: FiBook },
+    { id: 'store', name: 'コンビニ', icon: FiShoppingBag },
+    { id: 'transport', name: '交通', icon: FiTruck }
   ];
 
   const locations = [
     {
       id: 1,
-      name: '17号館 (経営学部)',
-      category: '学習',
-      description: '経営学部専用建物。講義室、セミナー室、学生ラウンジ完備',
-      tags: ['Wi-Fi', 'プリンター', 'カフェ', '静か'],
+      name: '青山学院大学図書館',
+      category: '図書館',
       distance: '徒歩3分',
-      rating: 4.5,
-      color: '#00A86B'
+      rating: 4.8,
+      description: '24時間開放している中央図書館です。個人学習室とグループ学習室を予約できます。',
+      tags: ['24時間', '学習室', 'WiFi'],
+      color: '#4ECDC4'
     },
     {
       id: 2,
-      name: '青山学生食堂',
-      category: '食堂',
-      description: '様々な和食、日本料理、洋食メニュー。学生割引適用',
-      tags: ['安い', '美味しい', '幅広い', '学生割引'],
-      distance: '徒歩5分',
-      rating: 4.2,
-      color: '#ff6b6b'
+      name: '学生会館カフェ',
+      category: 'カフェ',
+      distance: '徒歩2分',
+      rating: 4.5,
+      description: '学生がよく利用するカフェです。リーズナブルな価格で美味しいコーヒーと軽食を提供しています。',
+      tags: ['安い', 'WiFi', 'コンセント'],
+      color: '#FF6B6B'
     },
     {
       id: 3,
-      name: '中央図書館',
-      category: '学習',
-      description: '24時間閲覧室、グループスタディルーム、デジタル資料室',
-      tags: ['24時間', '静か', 'Wi-Fi', 'スタディルーム'],
-      distance: '徒歩7分',
-      rating: 4.7,
-      color: '#4ecdc4'
+      name: 'セブンイレブン青山店',
+      category: 'コンビニ',
+      distance: '徒歩1分',
+      rating: 4.2,
+      description: 'キャンパス内で最も近いコンビニです。生活用品やお菓子を購入できます。',
+      tags: ['24時間', '宅配', 'ATM'],
+      color: '#45B7D1'
     },
     {
       id: 4,
-      name: 'コンビニ (セブンイレブン)',
-      category: '便利施設',
-      description: 'キャンパス内コンビニ。生活用品、お菓子、飲み物販売',
-      tags: ['24時間', 'ATM', '宅配', '安い'],
-      distance: '徒歩2分',
-      rating: 4.0,
-      color: '#45b7d1'
+      name: '表参道駅',
+      category: '交通',
+      distance: '徒歩5分',
+      rating: 4.6,
+      description: '銀座線、半蔵門線、千代田線が利用できる駅です。渋谷や新宿へのアクセスが便利です。',
+      tags: ['地下鉄', '乗り換え', 'アクセス良好'],
+      color: '#96CEB4'
     },
     {
       id: 5,
-      name: '青山寄宿舎',
-      category: '寄宿舎',
-      description: '新築寄宿舎。1人部屋、2人部屋選択可能',
-      tags: ['きれい', 'セキュリティ', 'Wi-Fi', '洗濯室'],
-      distance: '徒歩10分',
+      name: 'スターバックス青山店',
+      category: 'カフェ',
+      distance: '徒歩4分',
       rating: 4.3,
-      color: '#96ceb4'
-    },
-    {
-      id: 6,
-      name: '正門バス停',
-      category: '交通',
-      description: '市内バス、コミュニティバス、シャトルバス停留所',
-      tags: ['交通便利', 'リアルタイム情報', '地下鉄接続'],
-      distance: '徒歩1分',
-      rating: 4.1,
-      color: '#feca57'
+      description: '広いスペースと多様なドリンクを提供するスターバックスです。勉強に最適な環境です。',
+      tags: ['勉強', 'WiFi', '広い'],
+      color: '#FF6B6B'
     }
   ];
 
   const filteredLocations = locations.filter(location => 
-    (activeCategory === '全て' || location.category === activeCategory) &&
+    (activeCategory === 'all' || location.category === activeCategory) &&
     (searchQuery === '' || location.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
      location.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+    setShowRouteSearch(true);
+  };
+
+  const handleStartGuidance = (route) => {
+    // Add detailed steps to the route for guidance
+    const routeWithSteps = {
+      ...route,
+      detailedSteps: [
+        {
+          action: '青山学院大学正門から出発',
+          description: '青山学院大学正門から出発して、和泉通りを進みます。'
+        },
+        {
+          action: '地下鉄銀座線 表参道駅へ移動',
+          description: '徒歩5分、地下鉄銀座線 表参道駅へ移動します。'
+        },
+        {
+          action: '地下鉄銀座線に乗車',
+          description: '渋谷方面の地下鉄銀座線に乗車し、3駅進みます。'
+        },
+        {
+          action: '新宿三丁目駅で下車',
+          description: '新宿三丁目駅で下車し、改札を出ます。'
+        },
+        {
+          action: '目的地到着',
+          description: '新宿三丁目駅から徒歩2分、目的地に到着します。'
+        }
+      ]
+    };
+    setSelectedRoute(routeWithSteps);
+    setShowRouteSearch(false);
+    setShowInlineGuidance(true);
+  };
+
+  const handlePlaceClick = (place) => {
+    setSelectedPlace(place);
+    setCurrentView('placeDetail');
+  };
+
+  const handleBackToMap = () => {
+    setCurrentView('map');
+    setSelectedRoute(null);
+    setSelectedPlace(null);
+  };
+
+  const handleCloseGuidance = () => {
+    setShowInlineGuidance(false);
+    setSelectedRoute(null);
+  };
+
+
+
+  const toggleRouteMode = () => {
+    setIsRouteMode(!isRouteMode);
+  };
+
+  const transportInfo = [
+    {
+      name: '銀座線',
+      detail: '表参道駅方面',
+      status: '正常運行',
+      color: '#00A86B',
+      icon: FiTruck
+    },
+    {
+      name: 'バス都01系統',
+      detail: '渋谷駅方面',
+      status: '5分後到着',
+      color: '#FF6B6B',
+      icon: FiTruck
+    },
+    {
+      name: 'キャンパスバス',
+      detail: 'キャンパス循環',
+      status: '運行中',
+      color: '#45B7D1',
+      icon: FiTruck
+    }
+  ];
+
+  if (currentView === 'placeDetail' && selectedPlace) {
+    return (
+      <PlaceDetailPage 
+        place={selectedPlace}
+        onBack={handleBackToMap}
+        darkMode={darkMode}
+      />
+    );
+  }
+
+
+
   return (
-    <MapContainer>
-      <Header>
-        <Title>キャンパスマップ</Title>
+    <MapContainer darkMode={darkMode}>
+      <Header darkMode={darkMode}>
+        <HeaderTop>
+          <div className="title">マップ</div>
+          <RouteToggle onClick={toggleRouteMode} active={isRouteMode}>
+            <FiNavigation size={16} />
+            {isRouteMode ? 'ルート検索を閉じる' : 'ルート検索'}
+          </RouteToggle>
+        </HeaderTop>
 
         <SearchContainer>
           <SearchIcon>
             <FiSearch size={20} />
           </SearchIcon>
           <SearchInput
-            placeholder="場所検索..."
+            placeholder="場所や建物名を検索してください..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -359,62 +587,117 @@ const MapPage = ({ user }) => {
       </Header>
 
       <ContentArea>
-        <MapView>
+        <RouteSearchButton 
+          active={isRouteMode}
+          onClick={toggleRouteMode}
+        >
+          {isRouteMode ? <FiX size={16} /> : <FiNavigation size={16} />}
+          {isRouteMode ? 'ルート検索を閉じる' : 'ルート検索'}
+        </RouteSearchButton>
+
+        <MapView expanded={isRouteMode}>
           <MapPlaceholder>
             <div className="icon">
               <FiMapPin />
             </div>
             <h3>青山学院大学キャンパス</h3>
-            <p>インタラクティブマップ (開発予定)</p>
+            <p>インタラクティブマップ {isRouteMode && '(拡張モード)'}</p>
           </MapPlaceholder>
         </MapView>
 
-        <LocationList>
-          {filteredLocations.map((location) => (
-            <LocationCard
-              key={location.id}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <LocationHeader>
-                <LocationInfo color={location.color}>
+        {showInlineGuidance && selectedRoute && (
+          <InlineRouteGuidance 
+            route={selectedRoute}
+            onClose={handleCloseGuidance}
+            darkMode={darkMode}
+          />
+        )}
+
+        {isRouteMode && !showInlineGuidance && (
+          <RouteInfoSection
+            darkMode={darkMode}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            <SectionTitle darkMode={darkMode}>
+              <FiTruck size={20} />
+              交通情報
+            </SectionTitle>
+            <TransportInfo>
+              {transportInfo.map((transport, index) => (
+                <TransportCard key={index} color={transport.color}>
                   <div className="icon">
-                    <FiMapPin size={20} />
+                    <transport.icon size={20} />
                   </div>
-                  <div className="details">
-                    <h4>{location.name}</h4>
-                    <p>{location.distance} • ⭐ {location.rating}</p>
+                  <div className="info">
+                    <div className="name">{transport.name}</div>
+                    <div className="detail">{transport.detail}</div>
                   </div>
-                </LocationInfo>
-                <LocationBadge color={location.color}>
-                  {location.category}
-                </LocationBadge>
-              </LocationHeader>
+                  <div className="status">{transport.status}</div>
+                </TransportCard>
+              ))}
+            </TransportInfo>
+          </RouteInfoSection>
+        )}
 
-              <LocationDescription>
-                <p>{location.description}</p>
-              </LocationDescription>
+        {!isRouteMode && (
+          <LocationList>
+            {filteredLocations.map((location) => (
+              <LocationCard
+                key={location.id}
+                darkMode={darkMode}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <LocationHeader>
+                  <LocationInfo color={location.color}>
+                    <div className="icon">
+                      <FiMapPin size={20} />
+                    </div>
+                    <div className="details">
+                      <h4>{location.name}</h4>
+                      <p>{location.distance} • ⭐ {location.rating}</p>
+                    </div>
+                  </LocationInfo>
+                  <LocationBadge color={location.color}>
+                    {location.category}
+                  </LocationBadge>
+                </LocationHeader>
 
-              <LocationTags>
-                {location.tags.map((tag, index) => (
-                  <Tag key={index}>#{tag}</Tag>
-                ))}
-              </LocationTags>
+                <LocationDescription darkMode={darkMode}>
+                  <p>{location.description}</p>
+                </LocationDescription>
 
-              <LocationActions>
-                <ActionButton primary>
-                  <FiNavigation size={12} style={{ marginRight: '4px' }} />
-                  ルート検索
-                </ActionButton>
-                <ActionButton>
-                  <FiMapPin size={12} style={{ marginRight: '4px' }} />
-                  詳細情報
-                </ActionButton>
-              </LocationActions>
-            </LocationCard>
-          ))}
-        </LocationList>
+                <LocationTags>
+                  {location.tags.map((tag, index) => (
+                    <Tag key={index}>#{tag}</Tag>
+                  ))}
+                </LocationTags>
+
+                <LocationActions>
+                  <ActionButton primary onClick={() => handleLocationSelect(location)}>
+                    <FiNavigation size={12} style={{ marginRight: '4px' }} />
+                    ルート案内
+                  </ActionButton>
+                  <ActionButton onClick={() => handlePlaceClick(location)}>
+                    <FiMapPin size={12} style={{ marginRight: '4px' }} />
+                    詳細情報
+                  </ActionButton>
+                </LocationActions>
+              </LocationCard>
+            ))}
+          </LocationList>
+        )}
       </ContentArea>
+
+      <RouteSearchModal 
+        isOpen={showRouteSearch}
+        onClose={() => setShowRouteSearch(false)}
+        destination={selectedLocation?.name || ''}
+        darkMode={darkMode}
+        onStartGuidance={handleStartGuidance}
+      />
     </MapContainer>
   );
 };
