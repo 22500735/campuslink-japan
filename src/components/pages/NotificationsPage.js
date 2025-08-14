@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiBell, FiBriefcase, FiShoppingBag, FiCalendar, FiMessageCircle, FiClock } from 'react-icons/fi';
+import { FiArrowLeft, FiBell, FiBriefcase, FiShoppingBag, FiCalendar, FiMessageCircle, FiClock, FiTrash2, FiX } from 'react-icons/fi';
 
 const NotificationsContainer = styled.div`
   width: 100%;
@@ -54,6 +54,70 @@ const ContentSection = styled.div`
   padding: 20px;
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+`;
+
+const ActionButton = styled.button`
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  &.delete-all {
+    background: ${props => props.darkMode ? '#dc3545' : '#dc3545'};
+    color: white;
+    
+    &:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+  }
+  
+  &.clear-read {
+    background: ${props => props.darkMode ? '#6c757d' : '#6c757d'};
+    color: white;
+    
+    &:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+  }
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: ${props => props.darkMode ? '#dc3545' : '#dc3545'};
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #c82333;
+    transform: scale(1.1);
+  }
+`;
+
 const NotificationCard = styled(motion.div)`
   background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
   border-radius: 16px;
@@ -64,10 +128,15 @@ const NotificationCard = styled(motion.div)`
   border-left: 4px solid ${props => props.priority === 'high' ? '#ff4757' : props.priority === 'medium' ? '#ffa502' : '#00A86B'};
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
   
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, ${props => props.darkMode ? '0.4' : '0.12'});
+    
+    ${DeleteButton} {
+      opacity: 1;
+    }
   }
 `;
 
@@ -155,7 +224,7 @@ const EmptyState = styled.div`
 `;
 
 const NotificationsPage = ({ onBack, darkMode }) => {
-  const [notifications] = useState([
+  const [notifications, setNotifications] = useState([
     {
       id: 1,
       type: 'job',
@@ -202,6 +271,24 @@ const NotificationsPage = ({ onBack, darkMode }) => {
     }
   ]);
 
+  const handleDeleteNotification = (notificationId, e) => {
+    e.stopPropagation();
+    setNotifications(prev => prev.filter(notification => notification.id !== notificationId));
+  };
+
+  const handleDeleteAll = () => {
+    if (window.confirm('모든 알림을 삭제하시겠습니까?')) {
+      setNotifications([]);
+    }
+  };
+
+  const handleClearRead = () => {
+    // For now, we'll clear all notifications as we don't have read/unread status
+    if (window.confirm('읽은 알림을 모두 삭제하시겠습니까?')) {
+      setNotifications([]);
+    }
+  };
+
   const getNotificationIcon = (type) => {
     switch (type) {
       case 'job':
@@ -240,6 +327,27 @@ const NotificationsPage = ({ onBack, darkMode }) => {
       </Header>
 
       <ContentSection>
+        {notifications.length > 0 && (
+          <ActionButtons>
+            <ActionButton 
+              className="clear-read" 
+              darkMode={darkMode}
+              onClick={handleClearRead}
+            >
+              <FiTrash2 size={16} />
+              읽은 알림 삭제
+            </ActionButton>
+            <ActionButton 
+              className="delete-all" 
+              darkMode={darkMode}
+              onClick={handleDeleteAll}
+            >
+              <FiX size={16} />
+              전체 삭제
+            </ActionButton>
+          </ActionButtons>
+        )}
+        
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <NotificationCard
@@ -249,6 +357,13 @@ const NotificationsPage = ({ onBack, darkMode }) => {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
+              <DeleteButton 
+                darkMode={darkMode}
+                onClick={(e) => handleDeleteNotification(notification.id, e)}
+              >
+                <FiX size={16} />
+              </DeleteButton>
+              
               <NotificationHeader darkMode={darkMode} type={notification.type}>
                 {getNotificationIcon(notification.type)}
                 <span className="type">{getTypeLabel(notification.type)}</span>

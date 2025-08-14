@@ -16,7 +16,7 @@ import ScrapPage from './pages/ScrapPage';
 import CourseReviewsPage from './pages/CourseReviewsPage';
 import ExtracurricularPage from './pages/ExtracurricularPage';
 import MyPage from './pages/MyPage';
-import ClubsAndSocietiesPage from './pages/ClubsAndSocietiesPage';
+import ClubPage from './pages/ClubPage';
 import SchoolSelectionPage from './pages/SchoolSelectionPage';
 import InformationGuidePage from './pages/InformationGuidePage';
 import PostDetailPage from './pages/PostDetailPage';
@@ -241,7 +241,7 @@ const MainApp = ({ user, onLogout }) => {
           />
         );
       case 'board':
-        return <BoardPage user={user} darkMode={darkMode} boardInfo={boardInfo} />;
+        return <BoardPage user={user} darkMode={darkMode} boardInfo={boardInfo} onNavigateToClubs={handleNavigateToClubs} />;
       case 'map':
         return <MapPage user={user} darkMode={darkMode} />;
       case 'marketplace':
@@ -296,7 +296,7 @@ const MainApp = ({ user, onLogout }) => {
         );
       case 'clubs':
         return (
-          <ClubsAndSocietiesPage 
+          <ClubPage 
             onBack={handleBackToHome}
             darkMode={darkMode}
           />

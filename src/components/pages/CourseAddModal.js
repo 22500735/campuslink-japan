@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiX, FiSearch, FiPlus, FiCheck } from 'react-icons/fi';
+import { FiX, FiSearch } from 'react-icons/fi';
 
 const ModalOverlay = styled(motion.div)`
   position: fixed;
@@ -186,25 +186,7 @@ const CourseCell = styled.div`
   }
 `;
 
-const AddButton = styled.button`
-  width: 32px;
-  height: 32px;
-  border: 2px solid ${props => props.added ? '#00A86B' : (props.darkMode ? '#555' : '#dee2e6')};
-  background: ${props => props.added ? '#00A86B' : 'transparent'};
-  color: ${props => props.added ? 'white' : (props.darkMode ? '#aaa' : '#6c757d')};
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: ${props => props.added ? '#008f5a' : (props.darkMode ? '#404040' : '#f8f9fa')};
-    border-color: ${props => props.added ? '#008f5a' : '#00A86B'};
-    transform: scale(1.05);
-  }
-`;
+
 
 const ModalFooter = styled.div`
   padding: 20px;
@@ -239,90 +221,122 @@ const SaveButton = styled.button`
   }
 `;
 
-const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
+const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses, selectedTimeSlot }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourses, setSelectedCourses] = useState(new Set());
 
   const allCourses = [
     {
-      id: 'MKT101',
-      name: 'マーケティング原論',
-      code: 'MKT101',
+      id: 'CS101',
+      name: 'データ構造とアルゴリズム',
+      code: 'CS101',
       professor: '田中教授',
       credits: 3,
-      time: '화 13:00-15:00',
-      room: 'B201'
+      time: '9:00-10:30',
+      timeSlot: '9:00-10:30',
+      room: '理工学部棟 301',
+      capacity: 40,
+      enrolled: 35
     },
     {
-      id: 'ECO201',
-      name: 'ミクロ経済学',
-      code: 'ECO201',
-      professor: '佐藤教授',
-      credits: 3,
-      time: '月 09:00-12:00',
-      room: 'A305'
-    },
-    {
-      id: 'MGT301',
-      name: '経営戦略論',
-      code: 'MGT301',
+      id: 'CS201',
+      name: 'オペレーティングシステム',
+      code: 'CS201',
       professor: '山田教授',
       credits: 3,
-      time: '水 14:00-17:00',
-      room: 'C102'
+      time: '9:00-10:30',
+      timeSlot: '9:00-10:30',
+      room: '理工学部棟 401',
+      capacity: 35,
+      enrolled: 32
     },
     {
-      id: 'FIN202',
-      name: '財務管理',
-      code: 'FIN202',
+      id: 'CS102',
+      name: 'Webプログラミング',
+      code: 'CS102',
+      professor: '佐藤教授',
+      credits: 3,
+      time: '11:00-12:30',
+      timeSlot: '11:00-12:30',
+      room: '理工学部棟 205',
+      capacity: 30,
+      enrolled: 28
+    },
+    {
+      id: 'CS301',
+      name: 'データベース',
+      code: 'CS301',
       professor: '高橋教授',
       credits: 3,
-      time: '木 10:00-13:00',
-      room: 'B305'
+      time: '11:00-12:30',
+      timeSlot: '11:00-12:30',
+      room: '理工学部棟 203',
+      capacity: 40,
+      enrolled: 37
     },
     {
-      id: 'ACC101',
-      name: '会計原理',
-      code: 'ACC101',
+      id: 'CS401',
+      name: 'ソフトウェア工学',
+      code: 'CS401',
       professor: '鈴木教授',
       credits: 3,
-      time: '金 13:00-16:00',
-      room: 'A201'
+      time: '13:30-15:00',
+      timeSlot: '13:30-15:00',
+      room: '理工学部棟 302',
+      capacity: 45,
+      enrolled: 41
     },
     {
-      id: 'STA201',
-      name: '統計学',
-      code: 'STA201',
+      id: 'CS501',
+      name: '人工知能',
+      code: 'CS501',
+      professor: '渡辺教授',
+      credits: 3,
+      time: '13:30-15:00',
+      timeSlot: '13:30-15:00',
+      room: '理工学部棟 501',
+      capacity: 50,
+      enrolled: 45
+    },
+    {
+      id: 'CS601',
+      name: 'ネットワークプログラミング',
+      code: 'CS601',
+      professor: '伊藤教授',
+      credits: 3,
+      time: '15:30-17:00',
+      timeSlot: '15:30-17:00',
+      room: '理工学部棟 405',
+      capacity: 25,
+      enrolled: 23
+    },
+    {
+      id: 'CS701',
+      name: 'キャップストーンデザイン',
+      code: 'CS701',
       professor: '中村教授',
       credits: 3,
-      time: '火 09:00-12:00',
-      room: 'D101'
-    },
-    {
-      id: 'LAW101',
-      name: '経営法規',
-      code: 'LAW101',
-      professor: '尹教授',
-      credits: 2,
-      time: '月 14:00-16:00',
-      room: 'E203'
-    },
-    {
-      id: 'HRM301',
-      name: '人事管理論',
-      code: 'HRM301',
-      professor: '西教授',
-      credits: 3,
-      time: '水 09:00-12:00',
-      room: 'F105'
+      time: '17:30-19:00',
+      timeSlot: '17:30-19:00',
+      room: '理工学部棟 601',
+      capacity: 20,
+      enrolled: 18
     }
   ];
 
-  const filteredCourses = allCourses.filter(course =>
-    course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    course.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    course.professor.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // 시간대별 필터링과 검색 기능
+  const filteredCourses = allCourses.filter(course => {
+    // 선택된 시간대가 있으면 해당 시간대의 과목만 표시
+    if (selectedTimeSlot && course.timeSlot !== selectedTimeSlot) {
+      return false;
+    }
+    
+    // 검색어 필터링
+    const searchLower = searchTerm.toLowerCase();
+    return course.name.toLowerCase().includes(searchLower) ||
+           course.code.toLowerCase().includes(searchLower) ||
+           course.professor.toLowerCase().includes(searchLower);
+  });
 
   const handleToggleCourse = (courseId) => {
     setSelectedCourses(prev => {
@@ -387,7 +401,7 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
             <div className="header-cell">時間</div>
             <div className="header-cell">単位</div>
             <div className="header-cell">講義室</div>
-            <div className="header-cell">定員</div>
+            <div className="header-cell">定員/履修者</div>
           </div>
 
           {filteredCourses.map((course) => (
@@ -422,16 +436,22 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
                 {course.room}
               </CourseCell>
               <CourseCell darkMode={darkMode} center>
-                <AddButton
-                  darkMode={darkMode}
-                  added={selectedCourses.has(course.id)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleToggleCourse(course.id);
-                  }}
-                >
-                  {selectedCourses.has(course.id) ? <FiCheck size={12} /> : <FiPlus size={12} />}
-                </AddButton>
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center',
+                  fontSize: '12px'
+                }}>
+                  <div style={{ fontWeight: 'bold' }}>
+                    {course.enrolled}/{course.capacity}
+                  </div>
+                  <div style={{ 
+                    color: course.enrolled >= course.capacity ? '#ff4444' : '#00A86B',
+                    fontSize: '10px'
+                  }}>
+                    {course.enrolled >= course.capacity ? '満席' : '空席あり'}
+                  </div>
+                </div>
               </CourseCell>
             </CourseRow>
           ))}

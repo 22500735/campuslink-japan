@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiFilter, FiPlus, FiBookmark, FiThumbsUp, FiMessageSquare, FiEye, FiMoreHorizontal, FiX, FiEdit3, FiArrowLeft, FiSend, FiHeart } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiPlus, FiBookmark, FiThumbsUp, FiMessageSquare, FiEye, FiMoreHorizontal, FiX, FiArrowLeft, FiList, FiEdit3 } from 'react-icons/fi';
 import WritePostModal from './WritePostModal';
+import ClubPage from './ClubPage';
 
 const BoardContainer = styled.div`
   width: 100%;
@@ -805,7 +806,373 @@ const EmptyScrapMessage = styled.div`
   }
 `;
 
-const BoardPage = ({ user, darkMode = false }) => {
+// Club Section Styles
+const ClubSection = styled.div`
+  padding: 20px;
+  padding-bottom: 40px;
+`;
+
+const ClubBackButton = styled(motion.button)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: ${props => props.darkMode ? '#404040' : '#f8f9fa'};
+  border: 1px solid ${props => props.darkMode ? '#555' : '#dee2e6'};
+  border-radius: 12px;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${props => props.darkMode ? '#4a5568' : '#e9ecef'};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const ClubSearchContainer = styled.div`
+  position: relative;
+  margin-bottom: 30px;
+`;
+
+const ClubSearchInput = styled.input`
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  font-size: 16px;
+  
+  &::placeholder {
+    color: ${props => props.darkMode ? '#aaa' : '#666'};
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #00A86B;
+    box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.1);
+  }
+`;
+
+const ClubSectionTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 700;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const ClubGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  justify-items: center;
+  margin-bottom: 30px;
+  position: relative;
+`;
+
+const ClubIcon = styled(motion.button)`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: ${props => props.bgColor || '#00A86B'};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const WindEffect = styled(motion.div)`
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  right: -20px;
+  height: 6px;
+  background: linear-gradient(90deg, transparent 0%, ${props => props.color} 20%, ${props => props.color} 80%, transparent 100%);
+  border-radius: 3px;
+  transform: translateY(-50%);
+  z-index: 2;
+  opacity: 0.9;
+  box-shadow: 0 0 15px ${props => props.color};
+`;
+
+const IndividualWindEffect = styled(motion.div)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent 0%, ${props => props.color} 30%, ${props => props.color} 70%, transparent 100%);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  opacity: 0.8;
+  box-shadow: 0 0 10px ${props => props.color};
+`;
+
+const SectionDivider = styled.div`
+  height: 1px;
+  background: ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  margin: 30px 0;
+`;
+
+const ListViewButton = styled.button`
+  width: 100%;
+  padding: 16px 24px;
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+  
+  &:hover {
+    background: ${props => props.darkMode ? '#404040' : '#f8f9fa'};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ClubListContainer = styled.div`
+  padding: 20px;
+`;
+
+const ClubListHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const SortButtons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const SortButton = styled.button`
+  padding: 8px 16px;
+  background: ${props => props.active ? '#00A86B' : (props.darkMode ? '#2d2d2d' : 'white')};
+  color: ${props => props.active ? 'white' : (props.darkMode ? 'white' : '#333')};
+  border: 1px solid ${props => props.active ? '#00A86B' : (props.darkMode ? '#404040' : '#e9ecef')};
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${props => props.active ? '#00A86B' : (props.darkMode ? '#404040' : '#f8f9fa')};
+  }
+`;
+
+const ClubListItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ClubListIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: ${props => props.bgColor};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 16px;
+`;
+
+const ClubListInfo = styled.div`
+  flex: 1;
+`;
+
+const ClubListName = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  margin-bottom: 4px;
+`;
+
+const ClubListCategory = styled.p`
+  font-size: 14px;
+  color: ${props => props.darkMode ? '#aaa' : '#666'};
+  margin-bottom: 8px;
+`;
+
+const ClubListStats = styled.div`
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: ${props => props.darkMode ? '#aaa' : '#666'};
+`;
+
+const ClubDetailContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: ${props => props.darkMode ? '#1a1a1a' : '#f5f5f5'};
+  z-index: 1000;
+  overflow-y: auto;
+`;
+
+const ClubBanner = styled.div`
+  height: 25vh;
+  background: linear-gradient(135deg, ${props => props.bannerColor || '#00A86B'} 0%, ${props => props.bannerColor2 || '#20B2AA'} 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+const ClubLogo = styled.div`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: ${props => props.bgColor};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+`;
+
+const ClubDetailHeader = styled.div`
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+`;
+
+const ClubDetailTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+`;
+
+const ClubDetailName = styled.h1`
+  font-size: 24px;
+  font-weight: 700;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+`;
+
+const ClubDetailCategory = styled.p`
+  font-size: 16px;
+  color: ${props => props.darkMode ? '#aaa' : '#666'};
+  margin-top: 4px;
+`;
+
+const ClubDetailDescription = styled.p`
+  font-size: 16px;
+  line-height: 1.6;
+  color: ${props => props.darkMode ? '#ccc' : '#555'};
+  margin-bottom: 20px;
+`;
+
+const CustomizeButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: #00A86B;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #008a5a;
+    transform: translateY(-1px);
+  }
+`;
+
+const CustomBlock = styled.div`
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  cursor: ${props => props.isCustomizing ? 'pointer' : 'default'};
+  transition: all 0.2s ease;
+
+  &:hover {
+    ${props => props.isCustomizing && `
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    `}
+  }
+`;
+
+const AddBlockButton = styled.button`
+  width: 100%;
+  padding: 16px;
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  border: 2px dashed ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  color: ${props => props.darkMode ? '#aaa' : '#666'};
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #00A86B;
+    color: #00A86B;
+  }
+`;
+
+const BoardPage = ({ user, darkMode = false, onNavigateToClubs }) => {
   const [activeBoard, setActiveBoard] = useState('全体掲示板');
   const [searchQuery, setSearchQuery] = useState('');
   const [showWriteModal, setShowWriteModal] = useState(false);
@@ -813,6 +1180,14 @@ const BoardPage = ({ user, darkMode = false }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showScrapPage, setShowScrapPage] = useState(false);
+  const [showClubSection, setShowClubSection] = useState(false);
+  const [clubSearchQuery, setClubSearchQuery] = useState('');
+  const [showClubListView, setShowClubListView] = useState(false);
+  const [selectedClub, setSelectedClub] = useState(null);
+  const [showClubDetail, setShowClubDetail] = useState(false);
+  const [isCustomizing, setIsCustomizing] = useState(false);
+  const [customBlocks, setCustomBlocks] = useState([]);
+  const [sortBy, setSortBy] = useState('name');
   const [showFavoriteEditModal, setShowFavoriteEditModal] = useState(false);
   const [filters, setFilters] = useState({
     category: 'all',
@@ -822,6 +1197,46 @@ const BoardPage = ({ user, darkMode = false }) => {
   const [scrapedPosts, setScrapedPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [newComment, setNewComment] = useState('');
+
+  // Generate 100+ clubs data
+  const [clubs] = useState(() => {
+    const clubCategories = ['학술', '예술', '음악', '공연', '문화', '생활', '체육', '사회', '취미', '종교', '봉사', '창업'];
+    const clubIcons = ['💻', '📷', '🎸', '💃', '📚', '👨‍🍳', '🎬', '⚽', '🤝', '🎮', '🎨', '🎤', '🏃', '📖', '🎯', '🎪', '🎭', '🎺', '🥁', '🎻', '🎹', '🎲', '🏀', '🏐', '🎾', '🏓', '🥊', '🤸', '🧘', '🏊', '🚴', '🏔️', '🎿', '🏄', '🎣', '🌱', '🔬', '🧪', '🔭', '📡', '🤖', '💡', '🎯', '🎪', '🎨', '✏️', '📝', '📐', '🧮', '💰', '📊', '📈', '🗣️', '🎙️', '📻', '📺', '🎥', '📹', '📸', '🖼️', '🖌️', '🖍️', '✂️', '📏', '📌', '📎', '🔗', '🔒', '🔑', '🗝️', '🔨', '⚒️', '🛠️', '⚙️', '🔧', '🔩', '⚖️', '🧲', '💊', '💉', '🩺', '🔬', '🧬', '🦠', '🧫', '🧪', '⚗️', '🌡️', '💎', '🔮', '🎰', '🃏', '🀄', '🎴', '🧩', '🎯', '🎪', '🎨', '🎭', '🎪', '🎡', '🎢', '🎠'];
+    const clubNames = [
+      '프로그래밍', '사진', '밴드', '댄스', '독서', '요리', '영화', '축구', '봉사', '게임',
+      '미술', '노래', '농구', '배구', '테니스', '탁구', '복싱', '체조', '요가', '수영',
+      '자전거', '등산', '스키', '서핑', '낚시', '원예', '과학', '화학', '천문', '무선통신',
+      '로봇', '발명', '다트', '서커스', '그림', '글쓰기', '수학', '경제', '토론', '방송',
+      '라디오', 'TV제작', '영상제작', '사진촬영', '그래픽디자인', '일러스트', '만화', '애니메이션',
+      '웹디자인', 'UI/UX', '마케팅', '광고', '홍보', '기획', '창업', '투자', '부동산', '보험',
+      '회계', '세무', '법률', '특허', '번역', '통역', '언어학습', '문학', '시', '소설',
+      '에세이', '저널리즘', '신문', '잡지', '출판', '편집', '교정', '교열', '도서관', '박물관',
+      '미술관', '갤러리', '전시', '큐레이션', '아트딜러', '경매', '수집', '골동품', '앤티크',
+      '빈티지', '패션', '스타일링', '메이크업', '헤어', '네일아트', '타투', '피어싱', '액세서리',
+      '주얼리', '시계', '가방', '신발', '모자', '선글라스', '향수', '화장품', '스킨케어',
+      '다이어트', '헬스', '피트니스', '크로스핏', '필라테스', '발레', '재즈댄스', '힙합댄스',
+      '라틴댄스', '사교댄스', '탱고', '살사', '브레이크댄스', '팝핑', '락킹', '하우스댄스'
+    ];
+    
+    return Array.from({ length: 120 }, (_, index) => ({
+      id: index + 1,
+      name: `${clubNames[index % clubNames.length]} 동아리`,
+      category: clubCategories[index % clubCategories.length],
+      icon: clubIcons[index % clubIcons.length],
+      bgColor: `hsl(${(index * 137.5) % 360}, 70%, 50%)`,
+      followers: Math.floor(Math.random() * 500) + 50,
+      members: Math.floor(Math.random() * 80) + 10,
+      isJoined: index < 8 // First 8 clubs are joined
+    }));
+  });
+
+  const myClubs = clubs.filter(club => club.isJoined);
+  const topClubsByFollowers = [...clubs].sort((a, b) => b.followers - a.followers).slice(0, 6);
+  
+  const filteredClubs = clubs.filter(club =>
+    club.name.toLowerCase().includes(clubSearchQuery.toLowerCase()) ||
+    club.category.toLowerCase().includes(clubSearchQuery.toLowerCase())
+  );
 
   const boards = ['学生会掲示板', 'サークル掲示板', 'スタディ掲示板', '情報掲示板', '質問掲示板', '資料共有', '講義評価', '試験情報', '恋愛掲示板', 'スポーツ掲示板', 'グルメ掲示板', '旅行掲示板'];
   
@@ -976,6 +1391,17 @@ const BoardPage = ({ user, darkMode = false }) => {
     });
   };
 
+  const handleBoardClick = (boardName) => {
+    if (boardName === 'サークル掲示板') {
+      setShowClubSection(true);
+      setActiveBoard(boardName);
+      return;
+    }
+    setShowClubSection(false);
+    setActiveBoard(boardName);
+    setShowAllBoardsModal(false);
+  };
+
   const handleFavoriteBoardChange = (index, newBoard) => {
     const updatedFavorites = [...favoriteBoards];
     const boardInfo = allBoards.find(board => board === newBoard);
@@ -1112,6 +1538,8 @@ const BoardPage = ({ user, darkMode = false }) => {
     );
   }
 
+  // Club section will be rendered inline, not as separate page
+
   // Render Scrap Page
   if (showScrapPage) {
     return (
@@ -1198,16 +1626,19 @@ const BoardPage = ({ user, darkMode = false }) => {
           </div>
         </HeaderContent>
 
-        <SearchContainer>
-          <SearchIcon>
-            <FiSearch size={20} />
-          </SearchIcon>
-          <SearchInput
-            placeholder="投稿を検索..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </SearchContainer>
+        {/* Search Bar - Hidden when club section is active */}
+        {!showClubSection && (
+          <SearchContainer>
+            <SearchIcon>
+              <FiSearch size={20} />
+            </SearchIcon>
+            <SearchInput
+              placeholder="投稿を検索..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </SearchContainer>
+        )}
 
         <FavoriteBoardsContainer>
           <FavoriteBoardsGrid>
@@ -1216,7 +1647,14 @@ const BoardPage = ({ user, darkMode = false }) => {
                 key={board.name}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveBoard(board.name)}
+                onClick={() => handleBoardClick(board.name)}
+                style={{
+                  background: board.name === 'サークル掲示板' && showClubSection ? 
+                    'linear-gradient(45deg, #00A86B, #20B2AA)' : 
+                    (board.name === 'サークル掲示板' ? 'linear-gradient(45deg, #ff6b6b, #ffa500)' : 'white'),
+                  color: board.name === 'サークル掲示板' ? 'white' : '#00A86B',
+                  boxShadow: board.name === 'サークル掲示板' ? '0 4px 15px rgba(255, 107, 107, 0.3)' : '0 2px 8px rgba(0, 0, 0, 0.1)'
+                }}
                 title={board.name}
               >
                 {board.shortName}
@@ -1234,32 +1672,38 @@ const BoardPage = ({ user, darkMode = false }) => {
           </FavoriteBoardsGrid>
         </FavoriteBoardsContainer>
 
-        <BoardTabs>
-          {boards.map((board) => (
-            <BoardTab
-              key={board}
-              active={activeBoard === board}
-              onClick={() => setActiveBoard(board)}
-            >
-              {board}
-            </BoardTab>
-          ))}
-        </BoardTabs>
+        {/* Board Tabs - Hidden when club section is active */}
+        {!showClubSection && (
+          <BoardTabs>
+            {boards.map((board) => (
+              <BoardTab
+                key={board}
+                active={activeBoard === board}
+                onClick={() => handleBoardClick(board)}
+              >
+                {board}
+              </BoardTab>
+            ))}
+          </BoardTabs>
+        )}
       </Header>
 
       <ContentArea>
-        <FilterBar>
-          <FilterButton darkMode={darkMode} onClick={() => setShowFilterModal(true)}>
-            <FiFilter size={16} />
-            フィルター
-          </FilterButton>
-          <span style={{ fontSize: '14px', color: darkMode ? '#aaa' : '#666' }}>
-            合計 {filteredPosts.length}件の投稿
-          </span>
-        </FilterBar>
+        {/* Filter Bar - Hidden when club section is active */}
+        {!showClubSection && (
+          <FilterBar>
+            <FilterButton darkMode={darkMode} onClick={() => setShowFilterModal(true)}>
+              <FiFilter size={16} />
+              フィルター
+            </FilterButton>
+            <span style={{ fontSize: '14px', color: darkMode ? '#aaa' : '#666' }}>
+              合計 {filteredPosts.length}件の投稿
+            </span>
+          </FilterBar>
+        )}
 
-        {/* Announcements */}
-        {announcements.map((announcement) => (
+        {/* Announcements - Hidden when club section is active */}
+        {!showClubSection && announcements.map((announcement) => (
           <AnnouncementCard key={announcement.id} darkMode={darkMode}>
             <div className="announcement-badge">お知らせ</div>
             <PostContent darkMode={darkMode}>
@@ -1278,8 +1722,391 @@ const BoardPage = ({ user, darkMode = false }) => {
           </AnnouncementCard>
         ))}
 
+        {/* Club Section */}
+        {showClubSection && (
+          <ClubSection>
+            <ClubBackButton
+              darkMode={darkMode}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setShowClubSection(false);
+                setActiveBoard('全体掲示板');
+              }}
+            >
+              <FiArrowLeft size={20} />
+              뒤로가기
+            </ClubBackButton>
+            
+            <ClubSearchContainer>
+              <ClubSearchInput
+                darkMode={darkMode}
+                placeholder="동아리 이름으로 검색..."
+                value={clubSearchQuery}
+                onChange={(e) => setClubSearchQuery(e.target.value)}
+              />
+            </ClubSearchContainer>
+
+            {/* My Clubs Section */}
+            <ClubSectionTitle darkMode={darkMode}>내가 속한 동아리</ClubSectionTitle>
+            <ClubGrid>
+              {myClubs.map((club, index) => (
+                <ClubIcon
+                  key={club.id}
+                  bgColor={club.bgColor}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    setSelectedClub(club);
+                    setShowClubDetail(true);
+                  }}
+                >
+                  <IndividualWindEffect
+                    color="#ff4444"
+                    initial={{ x: '-50px', opacity: 0 }}
+                    animate={{ x: '50px', opacity: [0, 1, 0] }}
+                    transition={{
+                      duration: 2 + index * 0.3,
+                      repeat: Infinity,
+                      ease: 'linear',
+                      delay: index * 0.2
+                    }}
+                  />
+                  {club.icon}
+                </ClubIcon>
+              ))}
+            </ClubGrid>
+
+            <SectionDivider darkMode={darkMode} />
+
+            {/* All Clubs Section */}
+            <ClubSectionTitle darkMode={darkMode}>전체 동아리</ClubSectionTitle>
+            
+            {/* Top 6 clubs with individual wind effects */}
+            <ClubGrid>
+              {topClubsByFollowers.map((club, index) => {
+                const isMyClub = myClubs.some(myClub => myClub.id === club.id);
+                const windColor = isMyClub ? "#ffff00" : "#00ff88"; // Yellow if both my club and popular, green if just popular
+                return (
+                  <ClubIcon
+                    key={club.id}
+                    bgColor={club.bgColor}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setSelectedClub(club);
+                      setShowClubDetail(true);
+                    }}
+                  >
+                    <IndividualWindEffect
+                      color={windColor}
+                      initial={{ x: '-50px', opacity: 0 }}
+                      animate={{ x: '50px', opacity: [0, 1, 0] }}
+                      transition={{
+                        duration: 2.2 + index * 0.2,
+                        repeat: Infinity,
+                        ease: 'linear',
+                        delay: index * 0.15
+                      }}
+                    />
+                    {club.icon}
+                  </ClubIcon>
+                );
+              })}
+            </ClubGrid>
+
+            {/* Rest of clubs in alternating 6-5 pattern */}
+            {Array.from({ length: Math.ceil((filteredClubs.length - 6) / 11) }, (_, rowIndex) => {
+              const startIndex = 6 + rowIndex * 11;
+              const rowClubs = filteredClubs.slice(startIndex, startIndex + 11);
+              const firstRowClubs = rowClubs.slice(0, 6);
+              const secondRowClubs = rowClubs.slice(6, 11);
+
+              return (
+                <div key={rowIndex}>
+                  {firstRowClubs.length > 0 && (
+                    <ClubGrid style={{ marginBottom: '16px' }}>
+                      {firstRowClubs.map((club, clubIndex) => (
+                        <ClubIcon
+                          key={club.id}
+                          bgColor={club.bgColor}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            setSelectedClub(club);
+                            setShowClubDetail(true);
+                          }}
+                        >
+                          {club.icon}
+                        </ClubIcon>
+                      ))}
+                    </ClubGrid>
+                  )}
+                  {secondRowClubs.length > 0 && (
+                    <ClubGrid 
+                      style={{ 
+                        gridTemplateColumns: 'repeat(5, 1fr)', 
+                        margin: '0 10%',
+                        marginBottom: '16px'
+                      }}
+                    >
+                      {secondRowClubs.map((club, clubIndex) => (
+                        <ClubIcon
+                          key={club.id}
+                          bgColor={club.bgColor}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            setSelectedClub(club);
+                            setShowClubDetail(true);
+                          }}
+                        >
+                          <IndividualWindEffect
+                            color="#ff8844"
+                            initial={{ x: '-100px' }}
+                            animate={{ x: '100px' }}
+                            transition={{
+                              duration: 2.8 + clubIndex * 0.15,
+                              repeat: Infinity,
+                              ease: 'linear',
+                              delay: clubIndex * 0.25
+                            }}
+                          />
+                          {club.icon}
+                        </ClubIcon>
+                      ))}
+                    </ClubGrid>
+                  )}
+                </div>
+              );
+            })}
+
+            <ListViewButton 
+              darkMode={darkMode}
+              onClick={() => {
+                setShowClubListView(true);
+                setShowClubSection(false);
+              }}
+            >
+              <FiList size={20} />
+              목록형으로 보기
+            </ListViewButton>
+          </ClubSection>
+        )}
+
+        {/* Club List View */}
+        {showClubListView && !showClubSection && (
+          <ClubListContainer>
+            <ClubListHeader>
+              <ClubBackButton
+                darkMode={darkMode}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setShowClubListView(false);
+                  setShowClubSection(true);
+                }}
+              >
+                <FiArrowLeft size={20} />
+                뒤로가기
+              </ClubBackButton>
+              
+              <SortButtons>
+                <SortButton 
+                  active={sortBy === 'name'} 
+                  darkMode={darkMode}
+                  onClick={() => setSortBy('name')}
+                >
+                  가나순
+                </SortButton>
+                <SortButton 
+                  active={sortBy === 'followers'} 
+                  darkMode={darkMode}
+                  onClick={() => setSortBy('followers')}
+                >
+                  팔로워 수
+                </SortButton>
+                <SortButton 
+                  active={sortBy === 'members'} 
+                  darkMode={darkMode}
+                  onClick={() => setSortBy('members')}
+                >
+                  클럽 회원 수
+                </SortButton>
+              </SortButtons>
+            </ClubListHeader>
+
+            {filteredClubs
+              .sort((a, b) => {
+                if (sortBy === 'name') return a.name.localeCompare(b.name);
+                if (sortBy === 'followers') return b.followers - a.followers;
+                if (sortBy === 'members') return b.members - a.members;
+                return 0;
+              })
+              .map((club) => (
+                <ClubListItem
+                  key={club.id}
+                  darkMode={darkMode}
+                  onClick={() => {
+                    setSelectedClub(club);
+                    setShowClubDetail(true);
+                    setShowClubListView(false);
+                  }}
+                >
+                  <ClubListIcon bgColor={club.bgColor}>
+                    {club.icon}
+                  </ClubListIcon>
+                  <ClubListInfo>
+                    <ClubListName darkMode={darkMode}>{club.name}</ClubListName>
+                    <ClubListCategory darkMode={darkMode}>{club.category}</ClubListCategory>
+                    <ClubListStats darkMode={darkMode}>
+                      <span>팔로워 {club.followers}명</span>
+                      <span>회원 {club.members}명</span>
+                    </ClubListStats>
+                  </ClubListInfo>
+                </ClubListItem>
+              ))}
+            
+            <ListViewButton 
+              darkMode={darkMode}
+              onClick={() => {
+                setShowClubListView(false);
+                setShowClubSection(true);
+              }}
+              style={{ marginTop: '30px' }}
+            >
+              <FiList size={20} style={{ transform: 'rotate(90deg)' }} />
+              격자형으로 보기
+            </ListViewButton>
+          </ClubListContainer>
+        )}
+
+        {/* Club Detail Page */}
+        {showClubDetail && selectedClub && (
+          <ClubDetailContainer darkMode={darkMode}>
+            <ClubBanner 
+              bannerColor={selectedClub.bgColor} 
+              bannerColor2={selectedClub.bgColor2 || selectedClub.bgColor}
+            >
+              <ClubBackButton
+                darkMode={false}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setShowClubDetail(false);
+                  setSelectedClub(null);
+                }}
+                style={{ 
+                  position: 'absolute', 
+                  top: '60px', 
+                  left: '20px',
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white'
+                }}
+              >
+                <FiArrowLeft size={20} />
+                뒤로가기
+              </ClubBackButton>
+              
+              <ClubLogo bgColor={selectedClub.bgColor}>
+                {selectedClub.icon}
+              </ClubLogo>
+            </ClubBanner>
+
+            <ClubDetailHeader darkMode={darkMode}>
+              <ClubDetailTitle>
+                <div>
+                  <ClubDetailName darkMode={darkMode}>{selectedClub.name}</ClubDetailName>
+                  <ClubDetailCategory darkMode={darkMode}>{selectedClub.category}</ClubDetailCategory>
+                  <ClubDetailDescription darkMode={darkMode}>
+                    {selectedClub.description || `${selectedClub.name}는 ${selectedClub.category} 분야의 동아리입니다. 현재 ${selectedClub.members}명의 회원이 활동하고 있으며, ${selectedClub.followers}명이 팔로우하고 있습니다.`}
+                  </ClubDetailDescription>
+                </div>
+              </ClubDetailTitle>
+
+              {/* Custom Blocks */}
+              {customBlocks.map((block, index) => (
+                <CustomBlock
+                  key={index}
+                  darkMode={darkMode}
+                  isCustomizing={isCustomizing}
+                  onClick={() => {
+                    if (isCustomizing) {
+                      const newTitle = prompt('블럭 제목을 수정하세요:', block.title);
+                      if (newTitle !== null) {
+                        const newContent = prompt('블럭 내용을 수정하세요:', block.content);
+                        if (newContent !== null) {
+                          const newBlocks = [...customBlocks];
+                          newBlocks[index] = { title: newTitle, content: newContent };
+                          setCustomBlocks(newBlocks);
+                        }
+                      }
+                    }
+                  }}
+                  style={{ position: 'relative' }}
+                >
+                  <h3 style={{ marginBottom: '12px', color: darkMode ? 'white' : '#333', fontSize: '18px', fontWeight: '600' }}>
+                    {block.title}
+                  </h3>
+                  <p style={{ color: darkMode ? '#ccc' : '#555', lineHeight: '1.6' }}>
+                    {block.content}
+                  </p>
+                  {isCustomizing && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCustomBlocks(customBlocks.filter((_, i) => i !== index));
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        background: '#ff4444',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '24px',
+                        height: '24px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </CustomBlock>
+              ))}
+
+              {isCustomizing && (
+                <AddBlockButton
+                  darkMode={darkMode}
+                  onClick={() => {
+                    const title = prompt('블럭 제목을 입력하세요:');
+                    if (title) {
+                      const content = prompt('블럭 내용을 입력하세요:');
+                      if (content) {
+                        setCustomBlocks([...customBlocks, { title, content }]);
+                      }
+                    }
+                  }}
+                >
+                  + 새 블럭 추가
+                </AddBlockButton>
+              )}
+
+              <CustomizeButton onClick={() => setIsCustomizing(!isCustomizing)}>
+                <FiEdit3 size={16} />
+                {isCustomizing ? '완료' : '커스터마이징'}
+              </CustomizeButton>
+            </ClubDetailHeader>
+          </ClubDetailContainer>
+        )}
+
         {/* Regular Posts */}
-        {filteredPosts.map((post) => (
+        {!showClubSection && filteredPosts.map((post) => (
           <PostCard
             key={post.id}
             darkMode={darkMode}
@@ -1368,8 +2195,7 @@ const BoardPage = ({ user, darkMode = false }) => {
                   key={board}
                   darkMode={darkMode}
                   onClick={() => {
-                    setActiveBoard(board);
-                    setShowAllBoardsModal(false);
+                    handleBoardClick(board);
                   }}
                 >
                   {board}

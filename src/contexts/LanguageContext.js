@@ -133,7 +133,85 @@ const translations = {
     thursday: '木',
     friday: '金',
     saturday: '土',
-    sunday: '日'
+    sunday: '日',
+    
+    // New Features - MyPage
+    myPage: 'マイページ',
+    profile: 'プロフィール',
+    nickname: 'ニックネーム',
+    accountSettings: 'アカウント',
+    communityRestrictions: 'コミュニティ利用制限',
+    informationGuide: '利用案内',
+    otherSettings: 'その他',
+    
+    // Profile Card
+    name: '名前',
+    school: '学校',
+    major: '専攻',
+    minor: '副専攻',
+    studentId: '学番',
+    currentStatus: '現在の状態',
+    enrolled: '在学生',
+    onLeave: '休学生',
+    graduated: '卒業生',
+    profileSettings: 'プロフィール設定',
+    
+    // Profile Settings
+    graduateTransition: '卒業生転換',
+    departmentSettings: '学科設定',
+    departmentSettingsDesc: '多専攻の場合、学科は最大3個まで登録可能です。学科を設定すると120日間変更できません。',
+    searchDepartment: '学科名を検索してください',
+    profilePhotoChange: 'プロフィール写真変更',
+    academicRecords: '学籍処理内歴',
+    enrollmentVerificationSuccess: '在学生認証成功',
+    
+    // Nickname Settings
+    nicknameChange: 'ニックネーム変更',
+    
+    // Account Settings
+    userId: 'ユーザーID',
+    passwordChange: 'パスワード変更',
+    newPassword: '新しいパスワード',
+    confirmNewPassword: '新しいパスワード確認',
+    currentPassword: '現在のパスワード',
+    passwordRequirements: '英文、数字、特殊文字が2種類以上組み合わされた8~20文字',
+    emailChange: 'メール変更',
+    
+    // Community Restrictions
+    noRestrictions: '利用制限内容がありません',
+    
+    // Information Guide
+    appVersion: 'アプリバージョン',
+    faq: 'よくある質問',
+    myAccount: 'マイアカウント',
+    schoolVerification: '学校認証',
+    timetable: '時間表',
+    communityUsage: 'コミュニティ利用',
+    announcements: 'お知らせ',
+    contact: 'お問い合わせ',
+    
+    // FAQ Questions
+    faqSchoolChange: '学校・キャンパスが変わったのですが変更できませんか？',
+    
+    // Other Settings
+    privacyConsent: '情報同意設定',
+    advertisingConsent: '広告性情報受信同意',
+    personalInfoConsent: '個人情報収集及び利用同意',
+    accountDeletion: '会員退会',
+    
+    // School/Department Selection
+    selectSchool: '学校選択',
+    selectDepartment: '学部選択',
+    searchSchool: '学校を検索',
+    searchDepartmentName: '学部名を検索',
+    
+    // Clubs & Societies
+    clubsAndSocieties: '学会及び動アリ',
+    officialClubs: '公式承認学会・動アリ',
+    interestedClubs: '関心学会',
+    interestedSocieties: '関心動アリ',
+    scrapClub: '学会スクラップ',
+    clubActivities: '学会活動'
   },
   
   en: {
@@ -433,12 +511,11 @@ export const LanguageProvider = ({ children }) => {
     return savedCurrency && currencySymbols[savedCurrency] ? savedCurrency : 'JPY';
   });
 
-  const [updateTrigger, setUpdateTrigger] = useState(0);
-
+  // Remove updateTrigger as it causes infinite loops
   // Debug log current state
   useEffect(() => {
-    console.log('LanguageContext state changed:', { currentLanguage, currentCurrency, updateTrigger });
-  }, [currentLanguage, currentCurrency, updateTrigger]);
+    console.log('LanguageContext state changed:', { currentLanguage, currentCurrency });
+  }, [currentLanguage, currentCurrency]);
 
   const changeLanguage = (languageCode) => {
     console.log('LanguageContext: Changing language from', currentLanguage, 'to', languageCode);
@@ -461,9 +538,6 @@ export const LanguageProvider = ({ children }) => {
       localStorage.setItem('campuslink_language', languageCode);
       localStorage.setItem('campuslink_currency', newCurrency);
       
-      // Force re-render trigger
-      setUpdateTrigger(prev => prev + 1);
-      
       console.log('Language changed successfully:', { language: languageCode, currency: newCurrency });
     }
   };
@@ -473,7 +547,6 @@ export const LanguageProvider = ({ children }) => {
     if (currencySymbols[currencyCode]) {
       setCurrentCurrency(currencyCode);
       localStorage.setItem('campuslink_currency', currencyCode);
-      setUpdateTrigger(prev => prev + 1);
       console.log('Currency changed successfully:', currencyCode);
     }
   };

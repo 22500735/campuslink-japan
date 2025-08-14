@@ -172,9 +172,9 @@ const DarkModeItem = styled.div`
   }
 `;
 
-const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
+const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout, onNavigateToMyPage, onNavigateToNotifications, onNavigateToInformationGuide }) => {
   const { t } = useLanguage();
-  
+
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -194,7 +194,7 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
         <SettingsGroup>
           <GroupTitle darkMode={darkMode}>{t('account')}</GroupTitle>
           <SettingsCard darkMode={darkMode}>
-            <SettingsItem darkMode={darkMode} isLast>
+            <SettingsItem darkMode={darkMode} isLast onClick={() => onNavigateToMyPage && onNavigateToMyPage()}>
               <FiUser className="icon" />
               <div className="content">
                 <div className="title">{t('profileSettings')}</div>
@@ -238,7 +238,7 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
           </SettingsCard>
           
           <SettingsCard darkMode={darkMode}>
-            <SettingsItem darkMode={darkMode}>
+            <SettingsItem darkMode={darkMode} onClick={() => onNavigateToNotifications && onNavigateToNotifications()}>
               <FiBell className="icon" />
               <div className="content">
                 <div className="title">{t('notifications_settings')}</div>
@@ -258,7 +258,7 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
         <SettingsGroup>
           <GroupTitle darkMode={darkMode}>その他</GroupTitle>
           <SettingsCard darkMode={darkMode}>
-            <SettingsItem darkMode={darkMode}>
+            <SettingsItem darkMode={darkMode} onClick={() => onNavigateToInformationGuide && onNavigateToInformationGuide()}>
               <FiHelpCircle className="icon" />
               <div className="content">
                 <div className="title">{t('about')}</div>

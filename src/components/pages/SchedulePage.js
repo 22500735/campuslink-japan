@@ -17,7 +17,7 @@ const ScheduleContainer = styled.div`
 `;
 
 const Header = styled.div`
-  background: ${props => props.theme && props.theme.colors ? props.theme.colors.gradient : (props.darkMode ? '#2d2d2d' : 'linear-gradient(135deg, #00A86B 0%, #20B2AA 100%)')};
+  background: ${props => props.theme && props.theme.gradient ? props.theme.gradient : (props.darkMode ? '#2d2d2d' : 'linear-gradient(135deg, #00A86B 0%, #20B2AA 100%)')};
   padding: 60px 20px 20px;
   color: white;
 `;
@@ -398,6 +398,7 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
   const [showViewSettings, setShowViewSettings] = useState(false);
   const [selectedDay, setSelectedDay] = useState('月');
   const [selectedTheme, setSelectedTheme] = useState('default');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [viewSettings, setViewSettings] = useState({
     showProfessor: true,
     showRoom: true,
@@ -413,64 +414,44 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
 
   const days = showWeekends ? ['月', '火', '水', '木', '金', '土', '日'] : ['月', '火', '水', '木', '金'];
   const timeSlots = [
-    '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
+    '9:00-10:30', '11:00-12:30', '13:30-15:00', '15:30-17:00', '17:30-19:00'
   ];
 
   const schedule = {
     '月': [
+      { id: 1, name: 'データ構造とアルゴリズム', professor: '田中教授', room: '理工学部棟 301', time: '9:00-10:30', color: '#00A86B', capacity: 40, enrolled: 35 },
       null,
-      { id: 1, name: 'データ構造とアルゴリズム', professor: '田中教授', room: '理工学部棟 301', color: '#00A86B' },
-      null,
-      null,
-      { id: 2, name: 'Webプログラミング', professor: '佐藤教授', room: '理工学部棟 205', color: '#FF6B6B' },
-      null,
-      null,
+      { id: 2, name: 'Webプログラミング', professor: '佐藤教授', room: '理工学部棟 205', time: '13:30-15:00', color: '#FF6B6B', capacity: 30, enrolled: 28 },
       null,
       null
     ],
     '火': [
-      { id: 3, name: 'オペレーティングシステム', professor: '山田教授', room: '理工学部棟 401', color: '#4ECDC4' },
+      { id: 3, name: 'オペレーティングシステム', professor: '山田教授', room: '理工学部棟 401', time: '9:00-10:30', color: '#4ECDC4', capacity: 35, enrolled: 32 },
       null,
       null,
-      null,
-      null,
-      { id: 4, name: 'ソフトウェア工学', professor: '鈴木教授', room: '理工学部棟 302', color: '#45B7D1' },
-      null,
-      null,
+      { id: 4, name: 'ソフトウェア工学', professor: '鈴木教授', room: '理工学部棟 302', time: '15:30-17:00', color: '#45B7D1', capacity: 45, enrolled: 41 },
       null
     ],
     '水': [
       null,
-      null,
-      { id: 5, name: 'データベース', professor: '高橋教授', room: '理工学部棟 203', color: '#96CEB4' },
-      null,
+      { id: 5, name: 'データベース', professor: '高橋教授', room: '理工学部棟 203', time: '11:00-12:30', color: '#96CEB4', capacity: 40, enrolled: 37 },
       null,
       null,
-      { id: 6, name: 'ネットワークプログラミング', professor: '伊藤教授', room: '理工学部棟 405', color: '#FFEAA7' },
-      null,
-      null
+      { id: 6, name: 'ネットワークプログラミング', professor: '伊藤教授', room: '理工学部棟 405', time: '17:30-19:00', color: '#FFEAA7', capacity: 25, enrolled: 23 }
     ],
     '木': [
       null,
-      { id: 1, name: 'データ構造とアルゴリズム', professor: '田中教授', room: '理工学部棟 301', color: '#00A86B' },
-      null,
-      null,
-      { id: 7, name: '人工知能', professor: '渡辺教授', room: '理工学部棟 501', color: '#DDA0DD' },
-      null,
-      null,
+      { id: 1, name: 'データ構造とアルゴリズム', professor: '田中教授', room: '理工学部棟 301', time: '11:00-12:30', color: '#00A86B', capacity: 40, enrolled: 35 },
+      { id: 7, name: '人工知能', professor: '渡辺教授', room: '理工学部棟 501', time: '13:30-15:00', color: '#DDA0DD', capacity: 50, enrolled: 45 },
       null,
       null
     ],
-    '金': [
+    '금': [
       null,
       null,
       null,
-      null,
-      null,
-      { id: 2, name: 'Webプログラミング', professor: '佐藤教授', room: '理工学部棟 205', color: '#FF6B6B' },
-      null,
-      null,
-      { id: 8, name: 'キャップストーンデザイン', professor: '中村教授', room: '理工学部棟 601', color: '#FFB347' }
+      { id: 2, name: 'Webプログラミング', professor: '佐藤教授', room: '理工学部棟 205', time: '15:30-17:00', color: '#FF6B6B', capacity: 30, enrolled: 28 },
+      { id: 8, name: 'キャップストーンデザイン', professor: '中村教授', room: '理工学部棟 601', time: '17:30-19:00', color: '#FFB347', capacity: 20, enrolled: 18 }
     ]
   };
 
@@ -810,9 +791,12 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
 
       <ContentArea>
         <ActionButtons>
-          <ActionButton darkMode={darkMode} onClick={() => setShowCourseModal(true)}>
-            <FiPlus />
-            授業追加
+          <ActionButton darkMode={darkMode} onClick={() => {
+            setSelectedTimeSlot(null);
+            setShowCourseModal(true);
+          }}>
+            <FiPlus size={16} />
+            <span>授業追加</span>
           </ActionButton>
           <ActionButton onClick={() => setShowShareModal(true)}>
             <FiShare2 />
@@ -833,6 +817,7 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
                     if (schedule[selectedDay] && schedule[selectedDay][index]) {
                       handleViewCourseDetail(schedule[selectedDay][index]);
                     } else {
+                      setSelectedTimeSlot(time);
                       setShowCourseModal(true);
                     }
                   }}
@@ -896,6 +881,7 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
           onClose={() => setShowCourseModal(false)}
           darkMode={darkMode}
           onAddCourses={handleAddCourses}
+          selectedTimeSlot={selectedTimeSlot}
         />
         
         <ShareOptionsModal

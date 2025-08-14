@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiUser, FiTrendingUp, FiStar, FiBriefcase, FiCalendar, FiBell, FiSettings, FiLogOut, FiTruck, FiBook, FiHome as FiHomeIcon, FiBookmark, FiMessageCircle, FiHeart, FiExternalLink } from 'react-icons/fi';
+import { FiUser, FiTrendingUp, FiStar, FiBriefcase, FiCalendar, FiBell, FiSettings, FiLogOut, FiTruck, FiBook, FiHome as FiHomeIcon, FiBookmark, FiMessageCircle, FiHeart, FiExternalLink, FiChevronRight } from 'react-icons/fi';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const HomeContainer = styled.div`
@@ -242,6 +242,32 @@ const ScrapButton = styled.button`
   }
 `;
 
+const MoreButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  margin-top: 16px;
+  background: ${props => props.darkMode ? '#2a2a2a' : '#f8f9fa'};
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
+  border-radius: 12px;
+  color: ${props => props.darkMode ? '#fff' : '#333'};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  
+  &:hover {
+    background: ${props => props.darkMode ? '#333' : '#e9ecef'};
+    transform: translateY(-1px);
+  }
+  
+  .icon {
+    font-size: 16px;
+  }
+`;
+
 const ReviewCard = styled(Card)`
   .course {
     font-weight: 600;
@@ -250,7 +276,7 @@ const ReviewCard = styled(Card)`
   }
   
   .professor {
-    color: #666;
+    color: ${props => props.darkMode ? '#ccc' : '#666'};
     font-size: 14px;
     margin-bottom: 12px;
   }
@@ -267,29 +293,28 @@ const ReviewCard = styled(Card)`
     
     .score {
       font-weight: 600;
-      color: #333;
+      color: ${props => props.darkMode ? '#fff' : '#333'};
     }
   }
   
   .review {
-    color: #666;
+    color: ${props => props.darkMode ? '#ccc' : '#666'};
     font-size: 14px;
     line-height: 1.5;
   }
 `;
 
-const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotifications, onNavigateToScrap, onNavigateToBoard, onNavigateToCourseReviews, onNavigateToExtracurricular, darkMode }) => {
+const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotifications, onNavigateToScrap, onNavigateToBoard, onNavigateToCourseReviews, onNavigateToExtracurricular, onNavigateToMyPage, onNavigateToClubs, onNavigateToSchoolSelection, darkMode }) => {
   const { t, currentLanguage } = useLanguage();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [scrapedPosts, setScrapedPosts] = useState(new Set());
 
-  const quickActions = [
-    { icon: FiCalendar, label: t('schedule'), action: () => {} },
+  const quickActions = useMemo(() => [
+    { icon: FiUser, label: t('myPage'), action: () => onNavigateToMyPage && onNavigateToMyPage() },
     { icon: FiBell, label: t('notifications'), action: () => onNavigateToNotifications && onNavigateToNotifications() },
     { icon: FiBookmark, label: t('scrap'), action: () => onNavigateToScrap && onNavigateToScrap() },
-    { icon: FiTruck, label: t('marketplace'), action: () => {} },
-    { icon: FiBook, label: t('courseReviews'), action: () => {} }
-  ];
+    { icon: FiTrendingUp, label: t('clubsAndSocieties'), action: () => onNavigateToClubs && onNavigateToClubs() }
+  ], [t, onNavigateToMyPage, onNavigateToNotifications, onNavigateToScrap, onNavigateToClubs]);
 
   const popularPosts = [
     {
@@ -448,6 +473,14 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
           </PostCard>
         ))}
 
+        <MoreButton 
+          darkMode={darkMode}
+          onClick={() => onNavigateToBoard && onNavigateToBoard()}
+        >
+          <span>더보기</span>
+          <FiChevronRight className="icon" />
+        </MoreButton>
+
         <SectionTitle darkMode={darkMode}>
           <FiStar />
           {t('courseReviews')}
@@ -468,11 +501,19 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
                 {'★'.repeat(Math.floor(review.rating))}
                 {review.rating % 1 !== 0 && '☆'}
               </div>
-              <span className="score">{review.rating}</span>
+              <span className="score">{review.rating}점</span>
             </div>
             <div className="review">{review.review}</div>
           </ReviewCard>
         ))}
+
+        <MoreButton 
+          darkMode={darkMode}
+          onClick={() => onNavigateToCourseReviews && onNavigateToCourseReviews()}
+        >
+          <span>더보기</span>
+          <FiChevronRight className="icon" />
+        </MoreButton>
 
         <SectionTitle darkMode={darkMode}>
           <FiBriefcase />
@@ -502,6 +543,14 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
             教育に関心のある方のご参加をお待ちしています。
           </p>
         </Card>
+
+        <MoreButton 
+          darkMode={darkMode}
+          onClick={() => onNavigateToExtracurricular && onNavigateToExtracurricular()}
+        >
+          <span>더보기</span>
+          <FiChevronRight className="icon" />
+        </MoreButton>
       </ContentSection>
     </HomeContainer>
   );
