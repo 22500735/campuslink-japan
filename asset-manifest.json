@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/campuslink-japan/static/js/main.6c2b702b.js",
+    "main.js": "/campuslink-japan/static/js/main.12562c83.js",
     "index.html": "/campuslink-japan/index.html",
-    "main.6c2b702b.js.map": "/campuslink-japan/static/js/main.6c2b702b.js.map"
+    "main.12562c83.js.map": "/campuslink-japan/static/js/main.12562c83.js.map"
   },
   "entrypoints": [
-    "static/js/main.6c2b702b.js"
+    "static/js/main.12562c83.js"
   ]
 }
