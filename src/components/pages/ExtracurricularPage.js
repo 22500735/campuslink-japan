@@ -407,18 +407,18 @@ const ExtracurricularPage = ({ onBack, darkMode }) => {
                   <div className="details">
                     <div className="detail">
                       <FiMapPin className="icon" size={14} />
-                      <span className="label">위치:</span>
+                      <span className="label">場所:</span>
                       <span>{activity.location}</span>
                     </div>
                     <div className="detail">
                       <FiCalendar className="icon" size={14} />
-                      <span className="label">마감:</span>
+                      <span className="label">締切日:</span>
                       <span>{activity.deadline}</span>
                     </div>
                     {activity.salary && (
                       <div className="detail">
                         <FiDollarSign className="icon" size={14} />
-                        <span className="label">급여:</span>
+                        <span className="label">給与:</span>
                         <span>{activity.salary}</span>
                       </div>
                     )}
@@ -471,31 +471,31 @@ const ExtracurricularPage = ({ onBack, darkMode }) => {
                   <div className="details">
                     <div className="detail">
                       <FiUsers className="icon" size={14} />
-                      <span className="label">모집인원:</span>
+                      <span className="label">募集人数:</span>
                       <span>{recruitment.participants}</span>
                     </div>
                     <div className="detail">
                       <FiCalendar className="icon" size={14} />
-                      <span className="label">일정:</span>
+                      <span className="label">日程:</span>
                       <span>{recruitment.schedule}</span>
                     </div>
                     <div className="detail">
                       <FiMapPin className="icon" size={14} />
-                      <span className="label">장소:</span>
+                      <span className="label">場所:</span>
                       <span>{recruitment.location}</span>
                     </div>
                   </div>
                 </ActivityContent>
 
                 <ApplicationSection darkMode={darkMode}>
-                  <div className="title">지원 요건</div>
+                  <div className="title">応募要件</div>
                   <div className="requirements">
                     {recruitment.requirements.map((req, index) => (
                       <span key={index} className="requirement">{req}</span>
                     ))}
                   </div>
                   <button className="apply-button">
-                    지원하기 ({recruitment.contact})
+                    応募する ({recruitment.contact})
                   </button>
                 </ApplicationSection>
               </RecruitmentCard>

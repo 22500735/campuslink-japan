@@ -324,9 +324,9 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
   const universities = [
     {
       id: 'yonsei',
-      name: '연세대학교',
-      description: '연세 블루 테마',
-      logo: '연',
+      name: '延世大学',
+      description: '延世大学ブルー',
+      logo: '延',
       colors: {
         primary: '#003876',
         gradient: 'linear-gradient(135deg, #003876 0%, #0066cc 100%)'
@@ -334,9 +334,9 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
     },
     {
       id: 'korea',
-      name: '고려대학교',
-      description: '고려 레드 테마',
-      logo: '고',
+      name: '高麗大學', 
+      description: '高麗大学赤色',
+      logo: '高',
       colors: {
         primary: '#8B0000',
         gradient: 'linear-gradient(135deg, #8B0000 0%, #DC143C 100%)'
@@ -344,9 +344,9 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
     },
     {
       id: 'snu',
-      name: '서울대학교',
-      description: 'SNU 그린 테마',
-      logo: 'S',
+      name: '首爾大學',
+      description: '首爾大学緑色',
+      logo: '首',
       colors: {
         primary: '#003d82',
         gradient: 'linear-gradient(135deg, #003d82 0%, #0066cc 100%)'
@@ -355,7 +355,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
     {
       id: 'kaist',
       name: 'KAIST',
-      description: 'KAIST 블루 테마',
+      description: 'KAISTブルー',
       logo: 'K',
       colors: {
         primary: '#004098',
@@ -365,7 +365,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
   ];
 
   const fonts = [
-    { id: 'system', name: '시스템 폰트', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+    { id: 'system', name: 'システムフォント', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
     { id: 'noto', name: 'Noto Sans', family: '"Noto Sans KR", sans-serif' },
     { id: 'malgun', name: '맑은 고딕', family: '"Malgun Gothic", sans-serif' },
     { id: 'nanumgothic', name: '나눔고딕', family: '"Nanum Gothic", sans-serif' }
@@ -392,7 +392,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
           <BackButton onClick={onBack}>
             <FiArrowLeft size={20} />
           </BackButton>
-          <HeaderTitle>테마 설정</HeaderTitle>
+          <HeaderTitle>テーマ設定</HeaderTitle>
         </HeaderTop>
       </Header>
 
@@ -400,7 +400,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
         <ThemeSection>
           <SectionTitle darkMode={darkMode}>
             <FiSettings />
-            기본 테마
+            基本テーマ
           </SectionTitle>
           <ThemeGrid>
             {themes.map((theme) => (
@@ -436,7 +436,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
         <UniversitySection>
           <SectionTitle darkMode={darkMode}>
             <FiImage />
-            타대학 테마
+            大学テーマ
           </SectionTitle>
           <UniversityGrid>
             {universities.map((university) => (
@@ -516,10 +516,10 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
         <WeekendSection>
           <SectionTitle darkMode={darkMode}>
             <FiSettings />
-            표시 설정
+            表示設定
           </SectionTitle>
           <SettingsRow darkMode={darkMode}>
-            <SettingsLabel darkMode={darkMode}>토・일요일 표시</SettingsLabel>
+            <SettingsLabel darkMode={darkMode}>土・日表示</SettingsLabel>
             <ToggleSwitch isOn={showWeekends} onClick={() => setShowWeekends(!showWeekends)} darkMode={darkMode}>
               <ToggleKnob layout transition={{ type: 'spring', stiffness: 700, damping: 30 }} />
             </ToggleSwitch>
@@ -529,7 +529,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
         <FontSection>
           <SectionTitle darkMode={darkMode}>
             <FiType />
-            폰트 설정
+            フォント設定
           </SectionTitle>
           <FontGrid>
             {fonts.map((font) => (
@@ -549,7 +549,7 @@ const ThemeSettingsPage = ({ onBack, darkMode, currentTheme, onThemeChange, init
         </FontSection>
 
         <ApplyButton onClick={handleApplyTheme}>
-          테마 적용하기
+          テーマ適用
         </ApplyButton>
       </ContentSection>
     </ThemeContainer>

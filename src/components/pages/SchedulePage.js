@@ -167,11 +167,27 @@ const ActionButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background: ${props => props.theme ? props.theme.primary : '#00A86B'};
-    color: white;
+    background-color: #00A86B !important;
+    border-color: #00A86B !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
+  }
+  
+  &:hover svg {
+    color: #ffffff !important;
+  }
+  
+  &:hover span {
+    color: #ffffff !important;
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
 `;
 
@@ -765,7 +781,7 @@ const SchedulePage = ({ user, darkMode, onNavigateToMarketplace, onNavigateToCou
     <ScheduleContainer darkMode={darkMode}>
       <Header darkMode={darkMode} theme={currentTheme}>
         <HeaderContent>
-          <Title>{user.name}님의 시간표</Title>
+          <Title>{user.name}さんの時刻表</Title>
           <HeaderActions>
             <HeaderButton onClick={() => setShowFriends(!showFriends)}>
               <FiUsers />

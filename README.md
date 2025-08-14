@@ -19,14 +19,14 @@ A professional mobile web application designed specifically for Japanese univers
 
 ### 🎨 Design Features
 - **Mobile-first responsive design**
-- **Japanese university color scheme** (Aoyama Green/Turquoise Blue)
+- **Japanese university color scheme** (青山学院大学色)
 - **Smooth animations** with Framer Motion
 - **Modern UI components** with styled-components
 - **Complete Japanese localization**
 
 ## 🚀 Live Demo
 
-Visit the live demo: [CampusLink Japan on GitHub Pages](https://your-username.github.io/campuslink-japan)
+Visit the live demo: [CampusLink Japan on GitHub Pages](https://22500735.github.io/campuslink-japan)
 
 *Note: For cache issues, append `?cache=bust` to the URL*
 

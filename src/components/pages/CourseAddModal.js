@@ -259,7 +259,7 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
       code: 'ECO201',
       professor: '佐藤教授',
       credits: 3,
-      time: '월 09:00-12:00',
+      time: '月 09:00-12:00',
       room: 'A305'
     },
     {
@@ -268,7 +268,7 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
       code: 'MGT301',
       professor: '山田教授',
       credits: 3,
-      time: '수 14:00-17:00',
+      time: '水 14:00-17:00',
       room: 'C102'
     },
     {
@@ -277,7 +277,7 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
       code: 'FIN202',
       professor: '高橋教授',
       credits: 3,
-      time: '목 10:00-13:00',
+      time: '木 10:00-13:00',
       room: 'B305'
     },
     {
@@ -286,7 +286,7 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
       code: 'ACC101',
       professor: '鈴木教授',
       credits: 3,
-      time: '금 13:00-16:00',
+      time: '金 13:00-16:00',
       room: 'A201'
     },
     {
@@ -295,25 +295,25 @@ const CourseAddModal = ({ isOpen, onClose, darkMode, onAddCourses }) => {
       code: 'STA201',
       professor: '中村教授',
       credits: 3,
-      time: '화 09:00-12:00',
+      time: '火 09:00-12:00',
       room: 'D101'
     },
     {
       id: 'LAW101',
-      name: '경영법규',
+      name: '経営法規',
       code: 'LAW101',
-      professor: '윤교수',
+      professor: '尹教授',
       credits: 2,
-      time: '월 14:00-16:00',
+      time: '月 14:00-16:00',
       room: 'E203'
     },
     {
       id: 'HRM301',
-      name: '인사관리론',
+      name: '人事管理論',
       code: 'HRM301',
-      professor: '서교수',
+      professor: '西教授',
       credits: 3,
-      time: '수 09:00-12:00',
+      time: '水 09:00-12:00',
       room: 'F105'
     }
   ];

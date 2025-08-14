@@ -255,8 +255,8 @@ const CourseReviewsPage = ({ onBack, darkMode }) => {
   const [showAll, setShowAll] = useState(false);
 
   const courseData = {
-    name: '마케팅론',
-    professor: '김교수',
+    name: 'マーケティング論',
+    professor: '教授',
     rating: 4.3,
     totalReviews: 127
   };
@@ -264,62 +264,62 @@ const CourseReviewsPage = ({ onBack, darkMode }) => {
   const reviews = [
     {
       id: 1,
-      user: '경영4학년',
+      user: '経営4学年',
       rating: 5.0,
-      date: '2024년 12월',
-      review: '정말 유익한 강의였습니다. 실무에 바로 적용할 수 있는 내용들이 많아서 취업 준비에도 도움이 되었어요. 교수님도 친절하시고 질문에 대한 답변도 자세히 해주십니다.',
+      date: '2024年12月',
+      review: '非常に有益な授業でした。実務にすぐに適用できる内容が多く、就職準備にも役立ちました。教授も親切で、質問に対する回答も丁寧でした。',
       examInfo: {
-        type: '객관식 + 서술형',
-        difficulty: '보통',
-        tips: '중간고사 60%, 기말고사 40%'
+        type: '客観式 + 論文',
+        difficulty: '普通',
+        tips: '中間試験60%, 最終試験40%'
       }
     },
     {
       id: 2,
-      user: '경영3학년',
+      user: '経営3学年',
       rating: 4.5,
-      date: '2024년 11월',
-      review: '과제가 조금 많긴 하지만 그만큼 배우는 것도 많습니다. 특히 케이스 스터디가 인상적이었어요. 팀 프로젝트를 통해 협업 능력도 기를 수 있었습니다.',
+      date: '2024年11月',
+      review: '課題が少し多くですが、それだけ多くのことを学べます。特にケーススタディが印象的でした。チームプロジェクトを通じて協働能力も養うことができました。',
       examInfo: {
-        type: '서술형 위주',
-        difficulty: '어려움',
-        tips: '출석 10%, 과제 30%, 시험 60%'
+        type: '論文主導',
+        difficulty: '難',
+        tips: '出席10%, 課題30%, 試験60%'
       }
     },
     {
       id: 3,
-      user: '경영2학년',
+      user: '経営2学年',
       rating: 4.0,
-      date: '2024년 10월',
-      review: '전반적으로 만족스러운 강의입니다. 다만 진도가 조금 빠른 편이라 복습이 필수예요. 교재 외에도 추가 자료를 많이 제공해주셔서 좋았습니다.',
+      date: '2024年10月',
+      review: '全体的に満足する授業です。ただし、進度が少し早いので復習が必要です。教材だけでなく、追加資料も多く提供してくださり良かったです。',
       examInfo: {
-        type: '객관식',
-        difficulty: '쉬움',
-        tips: '교재 위주로 출제'
+        type: '客観式',
+        difficulty: '簡単',
+        tips: '教材を重視して出題'
       }
     },
     {
       id: 4,
-      user: '경영4학년',
+      user: '経営4学年',
       rating: 3.5,
-      date: '2024년 9월',
-      review: '내용은 좋지만 수업 방식이 조금 아쉬웠어요. 좀 더 인터랙티브한 수업이었으면 좋겠습니다.',
+      date: '2024年9月',
+      review: '内容は良いですが、授業方法が少し残念でした。よりインタラクティブな授業が欲しかったです。',
       examInfo: {
-        type: '혼합형',
-        difficulty: '보통',
-        tips: '수업 내용 위주'
+        type: '混合型',
+        difficulty: '普通',
+        tips: '授業内容を重視'
       }
     },
     {
       id: 5,
-      user: '경영3학년',
+      user: '経営3学年',
       rating: 4.8,
-      date: '2024년 8월',
-      review: '최고의 강의 중 하나입니다! 교수님의 실무 경험을 바탕으로 한 설명이 정말 도움이 되었어요.',
+      date: '2024年8月',
+      review: '最高の授業の一つです！教授の実務経験に基づく説明が本当に役立ちました。',
       examInfo: {
-        type: '서술형',
-        difficulty: '보통',
-        tips: '이론과 실무 연계 중요'
+        type: '論文',
+        difficulty: '普通',
+        tips: '理論と実務を組み合わせて重要'
       }
     }
   ];
@@ -333,8 +333,8 @@ const CourseReviewsPage = ({ onBack, darkMode }) => {
   const displayedReviews = showAll ? sortedReviews : sortedReviews.slice(0, 5);
 
   const filterOptions = [
-    { key: 'rating', label: '높은 평점순', icon: FiTrendingUp },
-    { key: 'date', label: '최신순', icon: FiCalendar }
+    { key: 'rating', label: '高い評価順', icon: FiTrendingUp },
+    { key: 'date', label: '最新順', icon: FiCalendar }
   ];
 
   return (
@@ -413,18 +413,18 @@ const CourseReviewsPage = ({ onBack, darkMode }) => {
               <div className="review-text">{review.review}</div>
               
               <div className="exam-info">
-                <div className="title">시험 정보</div>
+                <div className="title">試験情報</div>
                 <div className="details">
                   <div className="detail">
-                    <span className="label">유형:</span>
+                    <span className="label">種類:</span>
                     <span>{review.examInfo.type}</span>
                   </div>
                   <div className="detail">
-                    <span className="label">난이도:</span>
+                    <span className="label">難易度:</span>
                     <span>{review.examInfo.difficulty}</span>
                   </div>
                   <div className="detail">
-                    <span className="label">팁:</span>
+                    <span className="label">Tips:</span>
                     <span>{review.examInfo.tips}</span>
                   </div>
                 </div>

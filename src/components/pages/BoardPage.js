@@ -694,7 +694,7 @@ const EmptyScrapMessage = styled.div`
 `;
 
 const BoardPage = ({ user, darkMode = false }) => {
-  const [activeBoard, setActiveBoard] = useState('전체');
+  const [activeBoard, setActiveBoard] = useState('全体掲示板');
   const [searchQuery, setSearchQuery] = useState('');
   const [showWriteModal, setShowWriteModal] = useState(false);
   const [showAllBoardsModal, setShowAllBoardsModal] = useState(false);
@@ -706,7 +706,7 @@ const BoardPage = ({ user, darkMode = false }) => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [newComment, setNewComment] = useState('');
 
-  const boards = ['전체', '자유게시판', '질문게시판', '정보게시판', '취업게시판', '강의평가', '중고거래', '동아리/소모임'];
+  const boards = ['学生会掲示板', 'サークル掲示板', 'スタディ掲示板', '情報掲示板', '質問掲示板', '資料共有', '講義評価', '試験情報', '恋愛掲示板', 'スポーツ掲示板', 'グルメ掲示板', '旅行掲示板'];
   
   const favoriteBoards = [
     { name: '自由掲示板', shortName: '自由' },
@@ -732,6 +732,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       likes: 24,
       comments: 8,
       views: 156,
+      board: '学生会掲示板',
       isNotice: true
     },
     {
@@ -743,6 +744,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       likes: 12,
       comments: 3,
       views: 89,
+      board: '情報掲示板',
       isNotice: true
     },
     {
@@ -754,6 +756,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       likes: 18,
       comments: 12,
       views: 234,
+      board: '学科掲示板',
       isNotice: false
     },
     {
@@ -765,6 +768,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       likes: 45,
       comments: 22,
       views: 567,
+      board: '就職掲示板',
       isNotice: false
     },
     {
@@ -776,6 +780,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       likes: 31,
       comments: 15,
       views: 298,
+      board: 'スタディ掲示板',
       isNotice: false
     }
   ];
@@ -793,17 +798,17 @@ const BoardPage = ({ user, darkMode = false }) => {
     {
       id: 1,
       postId: 1,
-      user: '익명1',
-      text: '정말 유용한 정보네요! 감사합니다.',
-      time: '1시간 전',
+      user: '匿名1',
+      text: '本当に役立つ情報ですね！ありがとう。',
+      time: '1時間前',
       likes: 3
     },
     {
       id: 2,
       postId: 1,
-      user: '익명2',
-      text: '저도 이거 궁금했는데 도움이 됐어요.',
-      time: '30분 전',
+      user: '匿名2',
+      text: '本当に役立つ情報ですね！ありがとう。',
+      time: '30分前',
       likes: 1
     }
   ];
@@ -851,7 +856,7 @@ const BoardPage = ({ user, darkMode = false }) => {
   };
 
   const filteredPosts = posts.filter(post => 
-    (activeBoard === '전체' || post.board === activeBoard) &&
+    (activeBoard === '全体掲示板' || post.board === activeBoard) &&
     (searchQuery === '' || post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
      post.content.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (post.likes >= filterRange.min && post.likes <= filterRange.max)

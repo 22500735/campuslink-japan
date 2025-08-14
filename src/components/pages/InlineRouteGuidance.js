@@ -245,7 +245,7 @@ const InlineRouteGuidance = ({ route, onClose, darkMode = false }) => {
     >
       <GuidanceHeader>
         <HeaderInfo>
-          <div className="title">경로 안내 중</div>
+          <div className="title">ルート案内中</div>
           <div className="subtitle">
             <span><FiClock size={12} /> {route.duration}</span>
             <span><FiMapPin size={12} /> {route.distance}</span>
@@ -267,7 +267,7 @@ const InlineRouteGuidance = ({ route, onClose, darkMode = false }) => {
           </StepInfo>
           <StepDistance darkMode={darkMode}>
             <div className="distance">150m</div>
-            <div className="label">남은 거리</div>
+            <div className="label">残り距離</div>
           </StepDistance>
         </StepHeader>
       </CurrentStep>
@@ -276,7 +276,7 @@ const InlineRouteGuidance = ({ route, onClose, darkMode = false }) => {
         <UpcomingSteps>
           <SectionTitle darkMode={darkMode}>
             <FiMapPin size={14} />
-            다음 단계
+            次のステップ
           </SectionTitle>
           {upcomingSteps.map((step, index) => (
             <UpcomingStep key={index} darkMode={darkMode}>
@@ -295,7 +295,7 @@ const InlineRouteGuidance = ({ route, onClose, darkMode = false }) => {
       <ControlButtons darkMode={darkMode}>
         <ControlButton darkMode={darkMode} onClick={handleRecalculate}>
           <FiRotateCcw size={14} />
-          재탐색
+          再検索
         </ControlButton>
         <ControlButton 
           primary={isVoiceEnabled} 
@@ -303,7 +303,7 @@ const InlineRouteGuidance = ({ route, onClose, darkMode = false }) => {
           onClick={toggleVoice}
         >
           <FiVolume2 size={14} />
-          {isVoiceEnabled ? '음성 끄기' : '음성 켜기'}
+          {isVoiceEnabled ? '音声を止める' : '音声を再生する'}
         </ControlButton>
       </ControlButtons>
     </GuidanceContainer>

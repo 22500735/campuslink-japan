@@ -178,11 +178,11 @@ const ShareOptionsModal = ({ isOpen, onClose, darkMode, onShare }) => {
   const [selectedDays, setSelectedDays] = useState(new Set());
 
   const days = [
-    { key: 'mon', label: '월' },
-    { key: 'tue', label: '화' },
-    { key: 'wed', label: '수' },
-    { key: 'thu', label: '목' },
-    { key: 'fri', label: '금' }
+    { key: 'mon', label: '月' },
+    { key: 'tue', label: '火' },
+    { key: 'wed', label: '水' },
+    { key: 'thu', label: '木' },
+    { key: 'fri', label: '金' }
   ];
 
   const shareOptions = [
@@ -300,7 +300,7 @@ const ShareOptionsModal = ({ isOpen, onClose, darkMode, onShare }) => {
                             handleDayToggle(day.key);
                           }}
                         >
-                          {day.label}요일
+                          {day.label}曜日
                         </DayButton>
                       ))}
                     </div>

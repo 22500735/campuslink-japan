@@ -288,13 +288,13 @@ const RouteGuidancePage = ({ route, onBack, darkMode = false }) => {
           <BackButton onClick={onBack}>
             <FiArrowLeft size={20} />
           </BackButton>
-          <HeaderTitle>경로 안내</HeaderTitle>
+          <HeaderTitle>経路案内</HeaderTitle>
         </HeaderTop>
         
         <RouteOverview>
           <RouteInfo>
             <DestinationInfo>
-              <div className="destination">목적지까지</div>
+              <div className="destination">目的地まで</div>
               <div className="route-type">{route.name} • {route.type}</div>
             </DestinationInfo>
             <RouteStats>
@@ -323,7 +323,7 @@ const RouteGuidancePage = ({ route, onBack, darkMode = false }) => {
             </StepInfo>
             <StepDistance darkMode={darkMode}>
               <div className="distance">150m</div>
-              <div className="label">남은 거리</div>
+              <div className="label">残り距離</div>
             </StepDistance>
           </StepHeader>
         </CurrentStep>
@@ -332,7 +332,7 @@ const RouteGuidancePage = ({ route, onBack, darkMode = false }) => {
           <UpcomingSteps darkMode={darkMode}>
             <SectionTitle darkMode={darkMode}>
               <FiMapPin size={18} />
-              다음 단계
+              次の段階
             </SectionTitle>
             <StepList>
               {upcomingSteps.map((step, index) => (
@@ -353,7 +353,7 @@ const RouteGuidancePage = ({ route, onBack, darkMode = false }) => {
         <ControlButtons>
           <ControlButton darkMode={darkMode} onClick={handleRecalculate}>
             <FiRotateCcw size={16} />
-            경로 재탐색
+            経路再検索
           </ControlButton>
           <ControlButton 
             primary={isVoiceEnabled} 
@@ -361,7 +361,7 @@ const RouteGuidancePage = ({ route, onBack, darkMode = false }) => {
             onClick={toggleVoice}
           >
             <FiVolume2 size={16} />
-            {isVoiceEnabled ? '음성 끄기' : '음성 켜기'}
+            {isVoiceEnabled ? '音声を切る' : '音声を切る'}
           </ControlButton>
         </ControlButtons>
       </ContentArea>

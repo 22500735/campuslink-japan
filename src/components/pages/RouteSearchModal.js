@@ -352,61 +352,61 @@ const RouteSearchModal = ({ isOpen, onClose, destination, darkMode = false, onSt
   const routes = [
     {
       id: 1,
-      name: '최단 경로',
+      name: '最短経路',
       type: 'fastest',
       color: '#00A86B',
-      duration: '12분',
+      duration: '12分',
       distance: '850m',
-      cost: '무료',
+      cost: '無料',
       steps: [
-        { transport: '도보', detail: '정문에서 출발', icon: FiNavigation, color: '#00A86B' },
-        { transport: '캠퍼스 셔틀', detail: '3번 정류장 승차', icon: FiTruck, color: '#45b7d1' },
-        { transport: '도보', detail: '목적지까지 도보 2분', icon: FiNavigation, color: '#00A86B' }
+        { transport: '歩行', detail: '正門から出発', icon: FiNavigation, color: '#00A86B' },
+        { transport: 'バス', detail: '3番バス停乗車', icon: FiTruck, color: '#45b7d1' },
+        { transport: '歩行', detail: '目的地まで歩行2分', icon: FiNavigation, color: '#00A86B' }
       ],
       detailedSteps: [
-        { action: '정문에서 출발', description: '홍익대학교 정문 (와우산로 94)에서 시작합니다.' },
-        { action: '캠퍼스 셔틀 3번 정류장으로 이동', description: '정문에서 직진 100m, 우측 셔틀 정류장' },
-        { action: '캠퍼스 셔틀 탑승', description: '홍대입구역 방면 셔틀 (5분 간격 운행)' },
-        { action: '목적지 정류장 하차', description: '3번째 정류장에서 하차' },
-        { action: '목적지 도착', description: '정류장에서 도보 2분 거리' }
+        { action: '正門から出発', description: '弘前大学正門 (和田山大通路94)から始まります。' },
+        { action: 'バス3番バス停移動', description: '正門から直進100m、右側バス停' },
+        { action: 'バス 탑승', description: '弘前大学バス (5分間隔運行)' },
+        { action: 'バス下車', description: '3番バス停で下車' },
+        { action: '目的地到着', description: 'バス停から目的地まで歩行2分' }
       ]
     },
     {
       id: 2,
-      name: '대중교통 경로',
+      name: '大衆交通経路',
       type: 'public',
       color: '#45b7d1',
-      duration: '18분',
+      duration: '18分',
       distance: '1.2km',
       cost: '1,370원',
       steps: [
-        { transport: '도보', detail: '홍대입구역까지', icon: FiNavigation, color: '#00A86B' },
-        { transport: '지하철 2호선', detail: '2정거장 이동', icon: FiTruck, color: '#45b7d1' },
-        { transport: '도보', detail: '목적지까지', icon: FiNavigation, color: '#00A86B' }
+        { transport: '歩行', detail: '홍大入門所まで', icon: FiNavigation, color: '#00A86B' },
+        { transport: '地下鉄2号線', detail: '2乗車', icon: FiTruck, color: '#45b7d1' },
+        { transport: '歩行', detail: '目的地まで', icon: FiNavigation, color: '#00A86B' }
       ],
       detailedSteps: [
-        { action: '홍대입구역으로 이동', description: '정문에서 홍대입구역 9번 출구까지 도보 8분' },
-        { action: '지하철 2호선 탑승', description: '신촌 방면 열차 탑승' },
-        { action: '신촌역 하차', description: '2정거장 후 신촌역 3번 출구로 나가기' },
-        { action: '목적지로 이동', description: '신촌역에서 목적지까지 도보 5분' }
+        { action: '正門から出発', description: '弘前大学正門 (和田山大通路94)から始まります。' },
+        { action: '地下鉄2号線 탑승', description: '新村方向列車 탑승' },
+        { action: '新村駅下車', description: '2乗車後新村駅3番出入口へ移動' },
+        { action: '目的地へ移動', description: '新村駅から目的地まで歩行5分' }
       ]
     },
     {
       id: 3,
-      name: '택시 경로',
+      name: 'タクシー経路',
       type: 'taxi',
       color: '#feca57',
-      duration: '8분',
+      duration: '8分',
       distance: '1.1km',
       cost: '4,200원',
       steps: [
-        { transport: '택시', detail: '직행 경로', icon: FiZap, color: '#feca57' }
+        { transport: 'タクシー', detail: '直行経路', icon: FiZap, color: '#feca57' }
       ],
       detailedSteps: [
-        { action: '택시 호출', description: '카카오택시 또는 타다 앱 사용 권장' },
-        { action: '정문에서 탑승', description: '홍익대학교 정문 앞 택시 승강장' },
-        { action: '목적지 직행', description: '교통상황에 따라 소요시간 변동 가능' },
-        { action: '목적지 도착', description: '예상 요금: 4,200원 (심야할증 제외)' }
+        { action: 'タクシー呼び出し', description: '카카오택시またはタダアプリを使用することを推奨' },
+        { action: '正門から乗車', description: '弘前大学正門前面のタクシー乗り場' },
+        { action: '目的地直行', description: '交通状況によって 소요時間は変動する可能性があります' },
+        { action: '目的地到着', description: '予想料金: 420円 (夜間料金除く)' }
       ]
     }
   ];
@@ -430,7 +430,7 @@ const RouteSearchModal = ({ isOpen, onClose, destination, darkMode = false, onSt
       >
         <ModalHeader darkMode={darkMode}>
           <ModalTitle darkMode={darkMode}>
-            {destination}까지 경로
+            {destination}までの経路
           </ModalTitle>
           <CloseButton darkMode={darkMode} onClick={onClose}>
             <FiX size={20} />
@@ -493,7 +493,7 @@ const RouteSearchModal = ({ isOpen, onClose, destination, darkMode = false, onSt
                 >
                   <DetailTitle darkMode={darkMode}>
                     <FiNavigation size={16} />
-                    상세 경로 안내
+                    詳細な経路案内
                   </DetailTitle>
                   <StepList>
                     {route.detailedSteps.map((step, index) => (
@@ -509,7 +509,7 @@ const RouteSearchModal = ({ isOpen, onClose, destination, darkMode = false, onSt
                   
                   <RouteGuidanceButton onClick={() => handleStartGuidance(route)}>
                     <FiPlay size={16} />
-                    경로 안내 시작
+                    経路案内開始
                   </RouteGuidanceButton>
                 </DetailedRouteInfo>
               )}

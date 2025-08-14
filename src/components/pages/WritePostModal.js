@@ -290,14 +290,14 @@ const WritePostModal = ({ isOpen, onClose, darkMode = false }) => {
   const [tagInput, setTagInput] = useState('');
 
   const boards = [
-    '자유게시판',
-    '질문게시판',
-    '정보게시판',
-    '취업게시판',
-    '강의평가',
-    '중고거래',
-    '동아리/소모임',
-    '학사공지'
+    '自由掲示板',
+    '質問掲示板',
+    '情報掲示板',
+    '就職掲示板',
+    '授業評価',
+    '中古取引',
+    'クラブ/サークル',
+    '学事公告'
   ];
 
   const handleTagAdd = (e) => {

@@ -249,30 +249,30 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
   if (!place) return null;
 
   const placeDetails = {
-    address: '서울특별시 마포구 와우산로 94',
+    address: '青山大学キャンパス内の主要施設です。',
     phone: '02-320-1114',
     website: 'https://www.hongik.ac.kr',
-    hours: '평일 09:00-18:00, 주말 휴무',
-    description: place.description || '홍익대학교 캠퍼스 내 주요 시설입니다.',
-    amenities: place.tags || ['Wi-Fi', '주차장', '접근성'],
+    hours: '平日 09:00-18:00, 休日休暇',
+    description: place.description || '青山大学キャンパス内の主要施設です。',
+    amenities: place.tags || ['Wi-Fi', '駐車場', 'アクセス性'],
     reviews: [
       {
         id: 1,
-        reviewer: '익명',
+        reviewer: '匿名',
         rating: 5,
-        comment: '시설이 깨끗하고 이용하기 편리합니다. 직원분들도 친절하세요.'
+        comment: '設施が清潔で利便です。スタッフも親切です。'
       },
       {
         id: 2,
-        reviewer: '학생A',
+        reviewer: '匿名',
         rating: 4,
-        comment: '위치가 좋고 접근성이 뛰어납니다. 다만 피크 시간에는 조금 붐빕니다.'
+        comment: '位置が良いです。アクセス性も抜群です。ただしピーク時間には少し混雑します。'
       },
       {
         id: 3,
-        reviewer: '졸업생',
+        reviewer: '卒業生',
         rating: 5,
-        comment: '학창시절 자주 이용했던 곳입니다. 추억이 많은 장소네요.'
+        comment: '学習時代に頻繁に利用していました。思い出深い場所です。'
       }
     ]
   };
@@ -296,7 +296,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
           <div className="rating">
             <FiStar fill="#ffd700" color="#ffd700" />
             <span>{place.rating}</span>
-            <span>({placeDetails.reviews.length}개 리뷰)</span>
+            <span>({placeDetails.reviews.length}レビュー)</span>
           </div>
         </PlaceInfo>
       </Header>
@@ -305,22 +305,22 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
         <ActionButtons>
           <ActionButton primary>
             <FiNavigation size={16} />
-            길찾기
+            経路案内
           </ActionButton>
           <ActionButton darkMode={darkMode} onClick={() => setIsFavorite(!isFavorite)}>
             <FiHeart size={16} fill={isFavorite ? '#ff4757' : 'none'} color={isFavorite ? '#ff4757' : 'currentColor'} />
-            {isFavorite ? '즐겨찾기 해제' : '즐겨찾기'}
+            {isFavorite ? 'お気に入り解除' : 'お気に入り'}
           </ActionButton>
           <ActionButton darkMode={darkMode} onClick={onBack}>
             <FiMapPin size={16} />
-            지도로 돌아가기
+            地図に戻る
           </ActionButton>
         </ActionButtons>
 
         <InfoSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiMapPin size={20} />
-            기본 정보
+            基本情報
           </SectionTitle>
           
           <InfoItem darkMode={darkMode}>
@@ -328,7 +328,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
               <FiMapPin size={16} />
             </div>
             <div className="content">
-              <div className="label">주소</div>
+              <div className="label">住所</div>
               <div className="value">{placeDetails.address}</div>
             </div>
           </InfoItem>
@@ -338,7 +338,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
               <FiPhone size={16} />
             </div>
             <div className="content">
-              <div className="label">전화번호</div>
+              <div className="label">電話番号</div>
               <div className="value">{placeDetails.phone}</div>
             </div>
           </InfoItem>
@@ -348,7 +348,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
               <FiClock size={16} />
             </div>
             <div className="content">
-              <div className="label">운영시간</div>
+              <div className="label">運営時間</div>
               <div className="value">{placeDetails.hours}</div>
             </div>
           </InfoItem>
@@ -358,7 +358,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
               <FiGlobe size={16} />
             </div>
             <div className="content">
-              <div className="label">웹사이트</div>
+              <div className="label">ウェブサイト</div>
               <div className="value">{placeDetails.website}</div>
             </div>
           </InfoItem>
@@ -367,7 +367,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
         <InfoSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiCamera size={20} />
-            시설 정보
+           施設情報
           </SectionTitle>
           <p style={{ 
             color: darkMode ? '#e2e8f0' : '#666', 
@@ -386,7 +386,7 @@ const PlaceDetailPage = ({ place, onBack, darkMode = false }) => {
         <InfoSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiStar size={20} />
-            리뷰 ({placeDetails.reviews.length})
+            レビュー ({placeDetails.reviews.length})
           </SectionTitle>
           <ReviewSection>
             {placeDetails.reviews.map((review) => (

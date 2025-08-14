@@ -709,7 +709,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
         // 관심 상품 등록 시 가격 변동 알림 설정
         const product = products.find(p => p.id === productId);
         if (product) {
-          setPriceChangeNotification(`${product.title}의 가격 변동 알림이 설정되었습니다.`);
+          setPriceChangeNotification(`${product.title}の価格変動通知が設定されました。`);
           setTimeout(() => setPriceChangeNotification(''), 3000);
         }
       }
@@ -725,9 +725,9 @@ const MarketplacePage = ({ user, darkMode = false }) => {
 
   const handleContactSeller = (method) => {
     if (method === 'chat') {
-      alert('채팅 기능은 준비 중입니다.');
+      alert('チャット機能は準備中です。');
     } else if (method === 'phone') {
-      alert('전화 연결 기능은 준비 중입니다.');
+      alert('電話接続機能は準備中です。');
     }
   };
 

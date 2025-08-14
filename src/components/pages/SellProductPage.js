@@ -263,12 +263,12 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
   });
 
   const categories = {
-    '책': ['전공책', '부교재', '참고서', '문제집'],
-    '전자기기': ['계산기', '노트북', '태블릿', '기타'],
-    '문구용품': ['필기구', '노트', '바인더', '기타'],
-    '생활용품': ['가구', '생활잡화', '의류', '기타'],
-    '악기': ['기타', '피아노', '관악기', '현악기'],
-    '기타': ['스포츠용품', '취미용품', '기타']
+    '本': ['教科書', '副参考書', '参考書', '問題集'],
+    '電子機器': ['計算機', 'ノートパソコン', 'タブレット', 'その他'],
+    '文具': ['筆具', 'ノート', 'バインダー', 'その他'],
+    '生活用品': ['家具', '生活雑貨', '衣類', 'その他'],
+    '楽器': ['ギター', 'ピアノ', '管楽器', '現楽器'],
+    'その他': ['スポーツ用品', '趣味用品', 'その他']
   };
 
   const handleInputChange = (field, value) => {
@@ -282,7 +282,7 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
 
   const handleSubmit = () => {
     if (!formData.category || !formData.title || !formData.description || !formData.price) {
-      alert('필수 항목을 모두 입력해주세요.');
+      alert('必須項目をすべて入力してください。');
       return;
     }
 
@@ -291,12 +291,12 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
       timestamp: new Date().toISOString()
     };
 
-    console.log('새 상품 등록:', productData);
-    alert('상품이 성공적으로 등록되었습니다!');
+    console.log('商品の新規登録:', productData);
+    alert('商品が成功して登録されました!');
     onBack();
   };
 
-  const showCourseInfo = formData.subcategory === '전공책';
+  const showCourseInfo = formData.subcategory === '教科書';
 
   return (
     <SellContainer darkMode={darkMode}>
@@ -304,38 +304,38 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
         <BackButton onClick={onBack}>
           <FiArrowLeft size={20} />
         </BackButton>
-        <Title>상품 판매</Title>
+        <Title>商品の販売</Title>
       </Header>
 
       <ContentArea>
         <FormSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiCamera size={20} />
-            상품 사진
+            商品の写真
           </SectionTitle>
           <ImageUploadArea darkMode={darkMode}>
             <div className="icon">
               <FiCamera />
             </div>
-            <div className="text">사진을 추가해주세요</div>
-            <div className="subtext">최대 10장까지 업로드 가능</div>
+            <div className="text">写真を追加してください</div>
+            <div className="subtext">最大10枚までアップロードできます</div>
           </ImageUploadArea>
         </FormSection>
 
         <FormSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiTag size={20} />
-            카테고리
+            カテゴリー
           </SectionTitle>
           
           <FormGroup>
-            <Label darkMode={darkMode}>대분류</Label>
+            <Label darkMode={darkMode}>大分類</Label>
             <Select
               darkMode={darkMode}
               value={formData.category}
               onChange={(e) => handleInputChange('category', e.target.value)}
             >
-              <option value="">카테고리를 선택하세요</option>
+              <option value="">カテゴリーを選択してください</option>
               {Object.keys(categories).map(category => (
                 <option key={category} value={category}>{category}</option>
               ))}
@@ -344,13 +344,13 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
 
           {formData.category && (
             <FormGroup>
-              <Label darkMode={darkMode}>소분류</Label>
+              <Label darkMode={darkMode}>小分類</Label>
               <Select
                 darkMode={darkMode}
                 value={formData.subcategory}
                 onChange={(e) => handleInputChange('subcategory', e.target.value)}
               >
-                <option value="">세부 카테고리를 선택하세요</option>
+                <option value="">セブカテゴリーを選択してください</option>
                 {categories[formData.category]?.map(subcategory => (
                   <option key={subcategory} value={subcategory}>{subcategory}</option>
                 ))}
@@ -368,12 +368,12 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
               <FormGroup>
                 <Label darkMode={darkMode}>
                   <FiBook size={16} style={{ marginRight: '4px' }} />
-                  수업 정보
+                  教育情報
                 </Label>
                 <Input
                   darkMode={darkMode}
                   type="text"
-                  placeholder="예: 마케팅원론, 경영학개론, 미시경제학 등"
+                  placeholder="例: 市場理論, 経営学概論, 微経済学等"
                   value={formData.courseInfo}
                   onChange={(e) => handleInputChange('courseInfo', e.target.value)}
                 />
@@ -385,32 +385,32 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
         <FormSection darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiTag size={20} />
-            상품 정보
+            商品情報
           </SectionTitle>
           
           <FormGroup>
-            <Label darkMode={darkMode}>제목</Label>
+            <Label darkMode={darkMode}>題名</Label>
             <Input
               darkMode={darkMode}
               type="text"
-              placeholder="상품 제목을 입력하세요"
+              placeholder="商品の題名を入力してください"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
             />
           </FormGroup>
 
           <FormGroup>
-            <Label darkMode={darkMode}>상품 설명</Label>
+            <Label darkMode={darkMode}>商品説明</Label>
             <TextArea
               darkMode={darkMode}
-              placeholder="상품에 대한 자세한 설명을 입력하세요&#10;- 상품 상태&#10;- 구매 시기&#10;- 사용 빈도&#10;- 기타 특이사항"
+              placeholder="商品の詳細な説明を入力してください&#10;- 商品の状態&#10;- 購入時期&#10;- 使用頻度&#10;- その他の特異事項"
               value={formData.description}
               onChange={(e) => handleInputChange('description', e.target.value)}
             />
           </FormGroup>
 
           <FormGroup>
-            <Label darkMode={darkMode}>판매 가격</Label>
+            <Label darkMode={darkMode}>販売価格</Label>
             <PriceInputContainer>
               <PriceSymbol darkMode={darkMode}>₩</PriceSymbol>
               <PriceInput
@@ -427,7 +427,7 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
 
       <ButtonContainer darkMode={darkMode}>
         <Button darkMode={darkMode} onClick={onBack}>
-          취소
+          取消
         </Button>
         <Button 
           primary 
@@ -435,7 +435,7 @@ const SellProductPage = ({ onBack, darkMode = false }) => {
           onClick={handleSubmit}
           disabled={!formData.category || !formData.title || !formData.description || !formData.price}
         >
-          상품 등록
+          商品の登録
         </Button>
       </ButtonContainer>
     </SellContainer>

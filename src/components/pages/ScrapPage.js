@@ -202,33 +202,33 @@ const ScrapPage = ({ onBack, darkMode }) => {
   const [scrapedPosts, setScrapedPosts] = useState([
     {
       id: 1,
-      board: '자유게시판',
-      author: '익명',
-      title: '취업 준비 스터디 모집합니다',
-      preview: '함께 취업 준비할 스터디원을 모집합니다. 주 2회 모임 예정이며, 서류 첨삭과 면접 연습을 함께 진행할 예정입니다.',
+      board: '自由掲示板',
+      author: '匿名',
+      title: '就職準備のスタディを募集します',
+      preview: '一緒に就職準備するスタディメンバーを募集します。週2回の集まり予定で、서류 첨삭과 면접 연습을 함께 진행할 예정입니다.',
       likes: 24,
       comments: 8,
-      scrapDate: '2일 전'
+      scrapDate: '2日 前'
     },
     {
       id: 2,
-      board: '정보게시판',
-      author: '컴공4학년',
-      title: '네이버 인턴십 후기 및 팁 공유',
-      preview: '작년 네이버 하계 인턴십을 다녀온 후기입니다. 지원 과정부터 실제 업무까지 자세히 공유드릴게요.',
+      board: '情報掲示板',
+      author: 'コンピュータ工学4年生',
+      title: 'ナバ 인턴シップの後感とアドバイスを共有します',
+      preview: '先年ナバ夏期インターンシップを経験した後感を詳しく共有します。 지원過程から実際の業務まで詳しく共有します。',
       likes: 156,
       comments: 32,
-      scrapDate: '1주 전'
+      scrapDate: '1周 前'
     },
     {
       id: 3,
-      board: '학과게시판',
-      title: '경영학과 전공 선택 가이드',
-      author: '경영학과 조교',
-      preview: '경영학과 3학년 전공 선택에 대한 가이드입니다. 각 전공별 특징과 진로 방향을 정리했습니다.',
+      board: '学科掲示板',
+      title: '経営学科の専攻選択ガイド',
+      author: '経営学科助教授',
+      preview: '経営学科3年生の専攻選択ガイドです。各専攻の特徴と進路方向をまとめました。',
       likes: 89,
       comments: 15,
-      scrapDate: '2주 전'
+      scrapDate: '2週 前'
     }
   ]);
 
@@ -244,7 +244,7 @@ const ScrapPage = ({ onBack, darkMode }) => {
           <BackButton onClick={onBack}>
             <FiArrowLeft size={20} />
           </BackButton>
-          <HeaderTitle>스크랩한 게시물</HeaderTitle>
+          <HeaderTitle>スクラップした投稿</HeaderTitle>
         </HeaderTop>
       </Header>
 
@@ -296,7 +296,7 @@ const ScrapPage = ({ onBack, darkMode }) => {
                 </div>
                 <div className="scrap-date">
                   <FiClock size={12} />
-                  {post.scrapDate} 스크랩
+                  {post.scrapDate} スクラップ
                 </div>
               </PostStats>
             </ScrapCard>
@@ -304,10 +304,10 @@ const ScrapPage = ({ onBack, darkMode }) => {
         ) : (
           <EmptyState darkMode={darkMode}>
             <FiBookmark className="icon" />
-            <div className="title">스크랩한 게시물이 없습니다</div>
+            <div className="title">スクラップした投稿がありません</div>
             <div className="subtitle">
-              관심있는 게시물을 스크랩해보세요.<br/>
-              나중에 쉽게 다시 찾아볼 수 있습니다.
+              視興の投稿をスクラップしてみてください。<br/>
+              あとで簡単に再び見つけることができます。
             </div>
           </EmptyState>
         )}

@@ -406,14 +406,14 @@ const NotificationSettingsPage = ({ onBack, darkMode = false }) => {
         <BackButton onClick={onBack}>
           <FiArrowLeft size={20} />
         </BackButton>
-        <Title>알림 설정</Title>
+        <Title>通知設定</Title>
       </Header>
 
       <ContentArea>
         <Section darkMode={darkMode}>
           <SectionTitle darkMode={darkMode}>
             <FiBell size={20} />
-            카테고리별 알림
+            カテゴリー別通知
           </SectionTitle>
           
           {alerts.map((alert) => (
@@ -441,7 +441,7 @@ const NotificationSettingsPage = ({ onBack, darkMode = false }) => {
 
           <AddAlertButton darkMode={darkMode} onClick={() => setShowModal(true)}>
             <FiPlus size={16} />
-            새 알림 추가
+            新しい通知を追加
           </AddAlertButton>
         </Section>
       </ContentArea>

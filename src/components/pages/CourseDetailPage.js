@@ -259,28 +259,28 @@ const TextbookSection = styled.div`
 
 const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplace, onNavigateToCourseReviews }) => {
   const course = courseData || {
-    name: '마케팅론',
-    professor: '김교수',
+    name: 'マーケティング理論',
+    professor: '田中教授',
     room: 'B201',
-    time: '화 13:00-15:00',
+    time: '水曜日 13:00-15:00',
     credits: 3,
-    department: '경영학부',
+    department: '経済学部',
     rating: 4.3,
     totalReviews: 127,
     textbooks: [
       {
         id: 1,
-        title: '현대 마케팅론',
-        author: '김마케팅',
-        price: '25,000원',
-        usedPrice: '15,000원'
+        title: '現代マーケティング理論',
+        author: '田中理論',
+        price: '25,000円',
+        usedPrice: '15,000円'
       },
       {
         id: 2,
-        title: '마케팅 전략과 실무',
-        author: '박전략',
-        price: '30,000원',
-        usedPrice: '18,000원'
+        title: 'マーケティング理論と実務',
+        author: '田中理論',
+        price: '30,000円',
+        usedPrice: '18,000円'
       }
     ]
   };
@@ -288,21 +288,21 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
   const recentReviews = [
     {
       id: 1,
-      author: '경영4학년',
+      author: '経済4年生',
       rating: 5.0,
-      text: '정말 유익한 강의였습니다. 실무에 바로 적용할 수 있는 내용들이 많아서...'
+      text: '非常に有益な授業でした。実務にすぐに適用できる内容が多く、非常に有益です...'
     },
     {
       id: 2,
-      author: '경영3학년',
+      author: '経済3年生',
       rating: 4.5,
-      text: '과제가 조금 많긴 하지만 그만큼 배우는 것도 많습니다...'
+      text: '課題が少し多くですが、それだけ多くのことを学ぶことができます...'
     },
     {
       id: 3,
-      author: '경영2학년',
+      author: '経済2年生',
       rating: 4.0,
-      text: '전반적으로 만족스러운 강의입니다. 다만 진도가 조금 빠른 편이라...'
+      text: '全体的に満足しています。ただし、進度が少し早い傾向があります...'
     }
   ];
 
@@ -356,7 +356,7 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
             onClick={() => onNavigateToCourseReviews(course, null, true)}
           >
             <FiStar size={16} />
-            강의평가 보기
+            講義評価を見る
           </ActionButton>
           <ActionButton darkMode={darkMode}>
             <FiMessageCircle size={16} />
@@ -367,7 +367,7 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
         <InfoCard darkMode={darkMode}>
           <CardTitle darkMode={darkMode}>
             <FiStar />
-            강의 평가
+            講義評価
           </CardTitle>
           
           <RatingSection darkMode={darkMode}>
@@ -379,7 +379,7 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
               <span className="score">{course.rating}</span>
             </div>
             <div className="participants">
-              {course.totalReviews || 42}명이 평가함
+              {course.totalReviews || 42} 人が評価しました
             </div>
           </RatingSection>
 
@@ -399,16 +399,16 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
 
           <ViewMoreButton 
             darkMode={darkMode}
-            onClick={() => onNavigateToCourseReviews(course, null, true)}
+            onClick={() => onNavigateToCourseReviews(course, null, true)}  
           >
-            모든 평가 보기 ({course.totalReviews || 42}개)
+            全ての評価を見る ({course.totalReviews || 42}件)
           </ViewMoreButton>
         </InfoCard>
 
         <InfoCard darkMode={darkMode}>
           <CardTitle darkMode={darkMode}>
             <FiBook />
-            교재 정보
+            教材情報
           </CardTitle>
           
           <TextbookSection darkMode={darkMode}>
@@ -421,7 +421,7 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
                   <div className="title">{textbook.title}</div>
                   <div className="author">{textbook.author}</div>
                   <div className="price">
-                    정가: {textbook.price} | 중고: {textbook.usedPrice}
+                    正価格: {textbook.price} | 中古価格: {textbook.usedPrice}
                   </div>
                 </div>
               </div>
@@ -434,7 +434,7 @@ const CourseDetailPage = ({ onBack, darkMode, courseData, onNavigateToMarketplac
             style={{ marginTop: '16px' }}
           >
             <FiShoppingBag size={16} />
-            중고 교재 구매하기
+            中古教材購入
           </ActionButton>
         </InfoCard>
       </ContentSection>
