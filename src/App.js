@@ -32,11 +32,23 @@ function App() {
       setUser(JSON.parse(savedUser));
       setCurrentScreen('main');
     } else {
-      // Show splash screen for 3 seconds
-      const timer = setTimeout(() => {
-        setCurrentScreen('login');
-      }, 3000);
-      return () => clearTimeout(timer);
+      // Temporary: Skip login for testing BoardPage fix
+      const testUser = {
+        id: 'test123',
+        name: 'テストユーザー',
+        email: 'test@ac.jp',
+        studentId: '20240001',
+        department: '情報テクノロジー学科'
+      };
+      setUser(testUser);
+      localStorage.setItem('campuslink_user', JSON.stringify(testUser));
+      setCurrentScreen('main');
+      
+      // Original login flow (commented out for testing)
+      // const timer = setTimeout(() => {
+      //   setCurrentScreen('login');
+      // }, 3000);
+      // return () => clearTimeout(timer);
     }
   }, []);
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { FiSearch, FiPlus, FiMessageSquare, FiThumbsUp, FiEye, FiFilter, FiMoreHorizontal, FiArrowLeft, FiBookmark, FiSend, FiHeart } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiSearch, FiFilter, FiPlus, FiBookmark, FiThumbsUp, FiMessageSquare, FiEye, FiMoreHorizontal, FiX, FiEdit3, FiArrowLeft, FiSend, FiHeart } from 'react-icons/fi';
 import WritePostModal from './WritePostModal';
 
 const BoardContainer = styled.div`
@@ -232,20 +232,12 @@ const FilterButton = styled.button`
   gap: 8px;
   background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
   border: 1px solid ${props => props.darkMode ? '#404040' : '#e9ecef'};
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: ${props => props.darkMode ? '#fff' : '#666'};
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: ${props => props.darkMode ? '#fff' : '#333'};
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  
-  &:hover {
-    border-color: #00A86B;
-    color: #00A86B;
-  }
-`;
-
-const PostCard = styled(motion.div)`
-  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 16px;
@@ -329,6 +321,21 @@ const PostStats = styled.div`
     gap: 4px;
     color: ${props => props.darkMode ? '#aaa' : '#999'};
     font-size: 14px;
+  }
+`;
+
+const PostCard = styled(motion.div)`
+  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid ${props => props.darkMode ? '#404040' : '#f0f0f0'};
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 `;
 
@@ -539,7 +546,7 @@ const SendButton = styled.button`
   }
 `;
 
-// Filter Modal Components
+// Filter Modal Components (MarketplacePage style)
 const FilterModal = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -548,92 +555,196 @@ const FilterModal = styled(motion.div)`
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 0;
 `;
 
 const FilterContent = styled(motion.div)`
-  background: ${props => props.darkMode ? '#2d2d2d' : 'white'};
-  border-radius: 16px;
+  background: ${props => props.darkMode ? '#2d3748' : 'white'};
+  border-radius: 20px 20px 0 0;
   width: 100%;
-  max-width: 400px;
-  padding: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
 `;
 
-const FilterTitle = styled.h3`
-  font-size: 18px;
+const FilterHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid ${props => props.darkMode ? '#4a5568' : '#e9ecef'};
+  position: sticky;
+  top: 0;
+  background: ${props => props.darkMode ? '#2d3748' : 'white'};
+  z-index: 10;
+`;
+
+const FilterTitle = styled.h2`
+  font-size: 20px;
   font-weight: 700;
   color: ${props => props.darkMode ? 'white' : '#333'};
-  margin-bottom: 20px;
-  text-align: center;
+  margin: 0;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: ${props => props.darkMode ? '#a0aec0' : '#666'};
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${props => props.darkMode ? '#4a5568' : '#f8f9fa'};
+  }
+`;
+
+
+
+// Filter Modal Components (MarketplacePage style)
+const FilterModalOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0;
+`;
+
+const FilterModalContainer = styled(motion.div)`
+  background: ${props => props.darkMode ? '#2d3748' : 'white'};
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+`;
+
+const FilterModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid ${props => props.darkMode ? '#4a5568' : '#e9ecef'};
+  position: sticky;
+  top: 0;
+  background: ${props => props.darkMode ? '#2d3748' : 'white'};
+  z-index: 10;
+`;
+
+const FilterModalTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 700;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  margin: 0;
 `;
 
 const FilterSection = styled.div`
-  margin-bottom: 24px;
+  padding: 20px 24px;
+  border-bottom: 1px solid ${props => props.darkMode ? '#4a5568' : '#f0f0f0'};
+  
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
-const FilterLabel = styled.label`
-  display: block;
+const FilterSectionTitle = styled.h3`
   font-size: 16px;
   font-weight: 600;
-  color: ${props => props.darkMode ? '#fff' : '#333'};
-  margin-bottom: 12px;
+  color: ${props => props.darkMode ? 'white' : '#333'};
+  margin-bottom: 16px;
+`;
+
+const FilterOptions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+`;
+
+const FilterOptionButton = styled.button`
+  padding: 8px 16px;
+  border: 1px solid ${props => props.active ? '#00A86B' : (props.darkMode ? '#4a5568' : '#e9ecef')};
+  background: ${props => props.active ? '#00A86B' : (props.darkMode ? '#1a202c' : 'white')};
+  color: ${props => props.active ? 'white' : (props.darkMode ? 'white' : '#333')};
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #00A86B;
+    background: ${props => props.active ? '#008f5a' : (props.darkMode ? '#2d3748' : '#f8f9fa')};
+  }
 `;
 
 const RangeSlider = styled.div`
   margin: 20px 0;
 `;
 
-const RangeInput = styled.input`
-  width: 100%;
+const SliderContainer = styled.div`
+  position: relative;
   height: 6px;
+  background: ${props => props.darkMode ? '#4a5568' : '#e9ecef'};
   border-radius: 3px;
-  background: ${props => props.darkMode ? '#404040' : '#e9ecef'};
-  outline: none;
-  -webkit-appearance: none;
-  
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #00A86B;
-    cursor: pointer;
-  }
-  
-  &::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #00A86B;
-    cursor: pointer;
-    border: none;
-  }
+  margin: 20px 0;
+`;
+
+const SliderTrack = styled.div`
+  position: absolute;
+  height: 6px;
+  background: #00A86B;
+  border-radius: 3px;
+  left: ${props => props.left}%;
+  width: ${props => props.width}%;
+`;
+
+const SliderThumb = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #00A86B;
+  border-radius: 50%;
+  top: -7px;
+  left: ${props => props.left}%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 168, 107, 0.3);
 `;
 
 const RangeValues = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
   font-size: 14px;
-  color: ${props => props.darkMode ? '#aaa' : '#666'};
+  color: ${props => props.darkMode ? '#a0aec0' : '#666'};
+  margin-top: 8px;
 `;
 
 const FilterButtons = styled.div`
   display: flex;
   gap: 12px;
-  margin-top: 24px;
+  padding: 20px 24px;
+  background: ${props => props.darkMode ? '#2d3748' : 'white'};
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid ${props => props.darkMode ? '#4a5568' : '#e9ecef'};
 `;
 
 const FilterActionButton = styled.button`
   flex: 1;
-  padding: 12px 16px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -649,6 +760,7 @@ const FilterActionButton = styled.button`
   ` : `
     background: ${props.darkMode ? '#404040' : '#f8f9fa'};
     color: ${props.darkMode ? '#fff' : '#666'};
+    border: 1px solid ${props.darkMode ? '#4a5568' : '#e9ecef'};
     
     &:hover {
       background: ${props.darkMode ? '#505050' : '#e9ecef'};
@@ -701,20 +813,25 @@ const BoardPage = ({ user, darkMode = false }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showScrapPage, setShowScrapPage] = useState(false);
-  const [filterRange, setFilterRange] = useState({ min: 0, max: 100 });
+  const [showFavoriteEditModal, setShowFavoriteEditModal] = useState(false);
+  const [filters, setFilters] = useState({
+    category: 'all',
+    sortBy: 'latest',
+    likesRange: [0, 100]
+  });
   const [scrapedPosts, setScrapedPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [newComment, setNewComment] = useState('');
 
   const boards = ['学生会掲示板', 'サークル掲示板', 'スタディ掲示板', '情報掲示板', '質問掲示板', '資料共有', '講義評価', '試験情報', '恋愛掲示板', 'スポーツ掲示板', 'グルメ掲示板', '旅行掲示板'];
   
-  const favoriteBoards = [
+  const [favoriteBoards, setFavoriteBoards] = useState([
     { name: '自由掲示板', shortName: '自由' },
     { name: '学科掲示板', shortName: '学科' },
     { name: '就職掲示板', shortName: '就職' },
     { name: '中古取引', shortName: '中古' },
     { name: '課外活動', shortName: '課外' }
-  ];
+  ]);
   
   const allBoards = [
     '全体掲示板', '自由掲示板', '学科掲示板', '就職掲示板', '中古取引', '課外活動',
@@ -852,15 +969,67 @@ const BoardPage = ({ user, darkMode = false }) => {
   };
 
   const handleResetFilter = () => {
-    setFilterRange({ min: 0, max: 100 });
+    setFilters({
+      category: 'all',
+      sortBy: 'latest',
+      likesRange: [0, 100]
+    });
   };
 
-  const filteredPosts = posts.filter(post => 
-    (activeBoard === '全体掲示板' || post.board === activeBoard) &&
-    (searchQuery === '' || post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-     post.content.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (post.likes >= filterRange.min && post.likes <= filterRange.max)
-  );
+  const handleFavoriteBoardChange = (index, newBoard) => {
+    const updatedFavorites = [...favoriteBoards];
+    const boardInfo = allBoards.find(board => board === newBoard);
+    if (boardInfo) {
+      updatedFavorites[index] = {
+        name: newBoard,
+        shortName: newBoard.length > 3 ? newBoard.substring(0, 2) : newBoard.replace('掲示板', '')
+      };
+      setFavoriteBoards(updatedFavorites);
+    }
+  };
+
+  const handleToggleScrap = (postId) => {
+    setScrapedPosts(prev => 
+      prev.includes(postId) 
+        ? prev.filter(id => id !== postId)
+        : [...prev, postId]
+    );
+  };
+
+  // 필터링 로직
+  const filteredPosts = posts.filter(post => {
+    // 게시판 필터
+    const matchesBoard = activeBoard === '全体掲示板' || post.board === activeBoard;
+    
+    // 검색어 필터
+    const matchesSearch = searchQuery === '' || 
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      post.content.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // 카테고리 필터
+    const matchesCategory = filters.category === 'all' || 
+      (filters.category === 'notice' && post.isNotice) ||
+      (filters.category === 'hot' && post.likes > 30) ||
+      (filters.category === 'recent' && post.time.includes('時間') || post.time.includes('分'));
+    
+    // 좋아요 수 범위 필터
+    const matchesLikes = post.likes >= filters.likesRange[0] && post.likes <= filters.likesRange[1];
+    
+    return matchesBoard && matchesSearch && matchesCategory && matchesLikes;
+  }).sort((a, b) => {
+    // 정렬 로직
+    switch (filters.sortBy) {
+      case 'popular':
+        return b.likes - a.likes;
+      case 'comments':
+        return b.comments - a.comments;
+      case 'views':
+        return b.views - a.views;
+      case 'latest':
+      default:
+        return 0; // 기본 순서 유지
+    }
+  });
 
   // Render Post Detail View
   if (selectedPost) {
@@ -1013,7 +1182,7 @@ const BoardPage = ({ user, darkMode = false }) => {
       <Header darkMode={darkMode}>
         <HeaderContent>
           <Title>{activeBoard || '掲示板'}</Title>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <WriteButton onClick={() => setShowWriteModal(true)}>
               <FiPlus size={16} />
               投稿する
@@ -1021,6 +1190,10 @@ const BoardPage = ({ user, darkMode = false }) => {
             <ScrapButton onClick={() => setShowScrapPage(true)}>
               <FiBookmark size={16} />
               スクラップ
+            </ScrapButton>
+            <ScrapButton onClick={() => setShowFavoriteEditModal(true)}>
+              <FiEdit3 size={16} />
+              編集
             </ScrapButton>
           </div>
         </HeaderContent>
@@ -1038,12 +1211,13 @@ const BoardPage = ({ user, darkMode = false }) => {
 
         <FavoriteBoardsContainer>
           <FavoriteBoardsGrid>
-            {favoriteBoards.map((board) => (
+            {favoriteBoards.map((board, index) => (
               <CircularBoardButton
                 key={board.name}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveBoard(board.name)}
+                title={board.name}
               >
                 {board.shortName}
               </CircularBoardButton>
@@ -1053,6 +1227,7 @@ const BoardPage = ({ user, darkMode = false }) => {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowAllBoardsModal(true)}
+              title="全ての掲示板を表示"
             >
               <FiMoreHorizontal size={20} />
             </CircularBoardButton>
@@ -1118,7 +1293,29 @@ const BoardPage = ({ user, darkMode = false }) => {
                 <span className="anonymous"> 匿名</span>
                 <span className="time">{post.time}</span>
               </PostInfo>
-              {post.isHot && <PostBadge hot>HOT</PostBadge>}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleScrap(post.id);
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: scrapedPosts.includes(post.id) ? '#00A86B' : (darkMode ? '#aaa' : '#666'),
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <FiBookmark size={16} fill={scrapedPosts.includes(post.id) ? 'currentColor' : 'none'} />
+                </button>
+                {post.isHot && <PostBadge hot>HOT</PostBadge>}
+              </div>
             </PostHeader>
             
             <PostContent darkMode={darkMode}>
@@ -1150,97 +1347,237 @@ const BoardPage = ({ user, darkMode = false }) => {
         darkMode={darkMode}
       />
 
-      {showAllBoardsModal && (
-        <AllBoardsModal
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setShowAllBoardsModal(false)}
-        >
-          <AllBoardsContainer
-            darkMode={darkMode}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {showAllBoardsModal && (
+          <AllBoardsModal
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowAllBoardsModal(false)}
           >
-            <AllBoardsTitle darkMode={darkMode}>すべての掲示板</AllBoardsTitle>
-            {allBoards.map((board) => (
-              <BoardListItem
-                key={board}
-                darkMode={darkMode}
-                onClick={() => {
-                  setActiveBoard(board);
-                  setShowAllBoardsModal(false);
+            <AllBoardsContainer
+              darkMode={darkMode}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AllBoardsTitle darkMode={darkMode}>すべての掲示板</AllBoardsTitle>
+              {allBoards.map((board) => (
+                <BoardListItem
+                  key={board}
+                  darkMode={darkMode}
+                  onClick={() => {
+                    setActiveBoard(board);
+                    setShowAllBoardsModal(false);
+                  }}
+                >
+                  {board}
+                </BoardListItem>
+              ))}
+            </AllBoardsContainer>
+          </AllBoardsModal>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showFilterModal && (
+          <FilterModalOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowFilterModal(false)}
+          >
+            <FilterModalContainer
+              darkMode={darkMode}
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FilterModalHeader darkMode={darkMode}>
+                <FilterModalTitle darkMode={darkMode}>フィルター</FilterModalTitle>
+                <CloseButton darkMode={darkMode} onClick={() => setShowFilterModal(false)}>
+                  <FiX size={20} />
+                </CloseButton>
+              </FilterModalHeader>
+
+              <FilterSection darkMode={darkMode}>
+                <FilterSectionTitle darkMode={darkMode}>カテゴリ</FilterSectionTitle>
+                <FilterOptions>
+                  <FilterOptionButton
+                    active={filters.category === 'all'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, category: 'all' }))}
+                  >
+                    全て
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.category === 'notice'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, category: 'notice' }))}
+                  >
+                    お知らせ
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.category === 'hot'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, category: 'hot' }))}
+                  >
+                    人気
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.category === 'recent'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, category: 'recent' }))}
+                  >
+                    最新
+                  </FilterOptionButton>
+                </FilterOptions>
+              </FilterSection>
+
+              <FilterSection darkMode={darkMode}>
+                <FilterSectionTitle darkMode={darkMode}>並び順</FilterSectionTitle>
+                <FilterOptions>
+                  <FilterOptionButton
+                    active={filters.sortBy === 'latest'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, sortBy: 'latest' }))}
+                  >
+                    最新順
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.sortBy === 'popular'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, sortBy: 'popular' }))}
+                  >
+                    人気順
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.sortBy === 'comments'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, sortBy: 'comments' }))}
+                  >
+                    コメント順
+                  </FilterOptionButton>
+                  <FilterOptionButton
+                    active={filters.sortBy === 'views'}
+                    darkMode={darkMode}
+                    onClick={() => setFilters(prev => ({ ...prev, sortBy: 'views' }))}
+                  >
+                    閲覧順
+                  </FilterOptionButton>
+                </FilterOptions>
+              </FilterSection>
+
+              <FilterSection darkMode={darkMode}>
+                <FilterSectionTitle darkMode={darkMode}>いいね数範囲</FilterSectionTitle>
+                <RangeSlider>
+                  <SliderContainer darkMode={darkMode}>
+                    <SliderTrack 
+                      left={(filters.likesRange[0] / 100) * 100}
+                      width={((filters.likesRange[1] - filters.likesRange[0]) / 100) * 100}
+                    />
+                    <SliderThumb left={(filters.likesRange[0] / 100) * 100} />
+                    <SliderThumb left={(filters.likesRange[1] / 100) * 100} />
+                  </SliderContainer>
+                  <RangeValues darkMode={darkMode}>
+                    <span>{filters.likesRange[0]}いいね</span>
+                    <span>{filters.likesRange[1]}いいね</span>
+                  </RangeValues>
+                </RangeSlider>
+              </FilterSection>
+
+              <FilterButtons darkMode={darkMode}>
+                <FilterActionButton darkMode={darkMode} onClick={handleResetFilter}>
+                  リセット
+                </FilterActionButton>
+                <FilterActionButton primary darkMode={darkMode} onClick={handleApplyFilter}>
+                  適用
+                </FilterActionButton>
+              </FilterButtons>
+            </FilterModalContainer>
+          </FilterModalOverlay>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showFavoriteEditModal && (
+          <AllBoardsModal
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowFavoriteEditModal(false)}
+          >
+            <AllBoardsContainer
+              darkMode={darkMode}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AllBoardsTitle darkMode={darkMode}>お気に入り編集</AllBoardsTitle>
+              <p style={{ 
+                color: darkMode ? '#aaa' : '#666', 
+                fontSize: '14px', 
+                marginBottom: '20px', 
+                textAlign: 'center' 
+              }}>
+                お好みの掲示板を選択してお気に入りを変更できます
+              </p>
+              {favoriteBoards.map((favorite, index) => (
+                <div key={index} style={{ marginBottom: '12px' }}>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '4px', 
+                    color: darkMode ? '#fff' : '#333',
+                    fontSize: '14px',
+                    fontWeight: '600'
+                  }}>
+                    お気に入り {index + 1}
+                  </label>
+                  <select
+                    value={favorite.name}
+                    onChange={(e) => handleFavoriteBoardChange(index, e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      border: `1px solid ${darkMode ? '#4a5568' : '#e9ecef'}`,
+                      background: darkMode ? '#1a202c' : 'white',
+                      color: darkMode ? 'white' : '#333',
+                      fontSize: '14px'
+                    }}
+                  >
+                    {allBoards.map((board) => (
+                      <option key={board} value={board}>
+                        {board}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <button
+                onClick={() => setShowFavoriteEditModal(false)}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  marginTop: '20px',
+                  background: '#00A86B',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
                 }}
               >
-                {board}
-              </BoardListItem>
-            ))}
-          </AllBoardsContainer>
-        </AllBoardsModal>
-      )}
-
-      {/* Filter Modal */}
-      {showFilterModal && (
-        <FilterModal
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setShowFilterModal(false)}
-        >
-          <FilterContent
-            darkMode={darkMode}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <FilterTitle darkMode={darkMode}>フィルター設定</FilterTitle>
-            
-            <FilterSection>
-              <FilterLabel darkMode={darkMode}>いいね数範囲</FilterLabel>
-              <RangeSlider>
-                <div style={{ marginBottom: '12px' }}>
-                  <span style={{ fontSize: '14px', color: darkMode ? '#aaa' : '#666' }}>最小値</span>
-                  <RangeInput
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={filterRange.min}
-                    onChange={(e) => setFilterRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
-                    darkMode={darkMode}
-                  />
-                </div>
-                <div>
-                  <span style={{ fontSize: '14px', color: darkMode ? '#aaa' : '#666' }}>最大値</span>
-                  <RangeInput
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={filterRange.max}
-                    onChange={(e) => setFilterRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
-                    darkMode={darkMode}
-                  />
-                </div>
-                <RangeValues darkMode={darkMode}>
-                  <span>最小: {filterRange.min}</span>
-                  <span>最大: {filterRange.max}</span>
-                </RangeValues>
-              </RangeSlider>
-            </FilterSection>
-            
-            <FilterButtons>
-              <FilterActionButton darkMode={darkMode} onClick={handleResetFilter}>
-                リセット
-              </FilterActionButton>
-              <FilterActionButton primary darkMode={darkMode} onClick={handleApplyFilter}>
-                適用
-              </FilterActionButton>
-            </FilterButtons>
-          </FilterContent>
-        </FilterModal>
-      )}
+                完了
+              </button>
+            </AllBoardsContainer>
+          </AllBoardsModal>
+        )}
+      </AnimatePresence>
     </BoardContainer>
   );
 };

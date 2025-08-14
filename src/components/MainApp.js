@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiHome, FiCalendar, FiMessageSquare, FiMap, FiShoppingBag } from 'react-icons/fi';
+import { FiHome, FiCalendar, FiMessageSquare, FiMap, FiShoppingBag, FiUser } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 
 // Import page components
@@ -15,6 +15,11 @@ import NotificationsPage from './pages/NotificationsPage';
 import ScrapPage from './pages/ScrapPage';
 import CourseReviewsPage from './pages/CourseReviewsPage';
 import ExtracurricularPage from './pages/ExtracurricularPage';
+import MyPage from './pages/MyPage';
+import ClubsAndSocietiesPage from './pages/ClubsAndSocietiesPage';
+import SchoolSelectionPage from './pages/SchoolSelectionPage';
+import InformationGuidePage from './pages/InformationGuidePage';
+import PostDetailPage from './pages/PostDetailPage';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -87,6 +92,7 @@ const MainApp = ({ user, onLogout }) => {
   const [courseReviewInfo, setCourseReviewInfo] = useState(null);
   const [navigationStack, setNavigationStack] = useState(['home']);
   const [scheduleContext, setScheduleContext] = useState(null);
+  const [postDetail, setPostDetail] = useState(null);
   const { t } = useLanguage();
 
   const navigationItems = [
@@ -94,7 +100,8 @@ const MainApp = ({ user, onLogout }) => {
     { id: 'schedule', label: t('schedule'), icon: FiCalendar },
     { id: 'board', label: t('board'), icon: FiMessageSquare },
     { id: 'map', label: t('map'), icon: FiMap },
-    { id: 'marketplace', label: t('marketplace'), icon: FiShoppingBag }
+    { id: 'marketplace', label: t('marketplace'), icon: FiShoppingBag },
+    { id: 'mypage', label: t('myPage'), icon: FiUser }
   ];
 
   const handleNavigateToSettings = () => {
@@ -109,22 +116,56 @@ const MainApp = ({ user, onLogout }) => {
     setCurrentPage('scrap');
   };
 
+  const handleNavigateToMyPage = () => {
+    setCurrentPage('mypage');
+  };
+
+  const handleNavigateToClubs = () => {
+    setCurrentPage('clubs');
+  };
+
+  const handleNavigateToSchoolSelection = () => {
+    setCurrentPage('schoolSelection');
+  };
+
   const handleNavigateToCourseReviews = (course, reviewId) => {
-    setNavigationStack(prev => [...prev, 'courseReviews']);
-    setCurrentPage('courseReviews');
-    setCourseReviewInfo({ course, reviewId });
+    if (reviewId) {
+      // Navigate to individual review detail
+      setNavigationStack(prev => [...prev, 'postDetail']);
+      setCurrentPage('postDetail');
+      setPostDetail({ postId: reviewId, boardName: '강의평가', course });
+    } else {
+      // Navigate to course reviews list
+      setNavigationStack(prev => [...prev, 'courseReviews']);
+      setCurrentPage('courseReviews');
+      setCourseReviewInfo({ course, reviewId });
+    }
   };
 
   const handleNavigateToExtracurricular = (category, postId) => {
-    setCurrentPage('board');
-    // Navigate to board page with employment/extracurricular category
-    setBoardInfo({ boardName: category === '就職情報' ? '就職掲示板' : '課外活動掲示板', postId });
+    if (postId) {
+      // Navigate to individual post detail
+      setNavigationStack(prev => [...prev, 'postDetail']);
+      setCurrentPage('postDetail');
+      setPostDetail({ postId, boardName: category === '就職情報' ? '취업정보' : '과외활동' });
+    } else {
+      // Navigate to board list
+      setCurrentPage('board');
+      setBoardInfo({ boardName: category === '就職情報' ? '就職掲示板' : '課外活動掲示板', postId });
+    }
   };
 
   const handleNavigateToBoard = (boardName, postId) => {
-    setCurrentPage('board');
-    // Store board and post info for BoardPage
-    setBoardInfo({ boardName, postId });
+    if (postId) {
+      // Navigate to individual post detail
+      setNavigationStack(prev => [...prev, 'postDetail']);
+      setCurrentPage('postDetail');
+      setPostDetail({ postId, boardName });
+    } else {
+      // Navigate to board list
+      setCurrentPage('board');
+      setBoardInfo({ boardName, postId });
+    }
   };
 
   const handleNavigateToSchedule = () => {
@@ -212,6 +253,9 @@ const MainApp = ({ user, onLogout }) => {
             darkMode={darkMode}
             setDarkMode={setDarkMode}
             onLogout={onLogout}
+            onNavigateToMyPage={handleNavigateToMyPage}
+            onNavigateToNotifications={handleNavigateToNotifications}
+            onNavigateToInformationGuide={() => setCurrentPage('informationGuide')}
           />
         );
       case 'notifications':
@@ -242,6 +286,49 @@ const MainApp = ({ user, onLogout }) => {
             darkMode={darkMode}
           />
         );
+      case 'mypage':
+        return (
+          <MyPage 
+            onBack={handleBackToHome}
+            darkMode={darkMode}
+            onLogout={onLogout}
+          />
+        );
+      case 'clubs':
+        return (
+          <ClubsAndSocietiesPage 
+            onBack={handleBackToHome}
+            darkMode={darkMode}
+          />
+        );
+      case 'schoolSelection':
+        return (
+          <SchoolSelectionPage 
+            onBack={handleBackToHome}
+            darkMode={darkMode}
+            onSchoolSelect={(selection) => {
+              console.log('School selected:', selection);
+              setCurrentPage('home');
+            }}
+          />
+        );
+      case 'informationGuide':
+        return (
+          <InformationGuidePage 
+            onBack={handleBackToPrevious}
+            darkMode={darkMode}
+          />
+        );
+      case 'postDetail':
+        return (
+          <PostDetailPage 
+            onBack={handleBackToPrevious}
+            darkMode={darkMode}
+            postId={postDetail?.postId}
+            boardName={postDetail?.boardName}
+            course={postDetail?.course}
+          />
+        );
       default:
         return (
           <HomePage 
@@ -253,13 +340,16 @@ const MainApp = ({ user, onLogout }) => {
             onNavigateToBoard={handleNavigateToBoard}
             onNavigateToCourseReviews={handleNavigateToCourseReviews}
             onNavigateToExtracurricular={handleNavigateToExtracurricular}
+            onNavigateToMyPage={handleNavigateToMyPage}
+            onNavigateToClubs={handleNavigateToClubs}
+            onNavigateToSchoolSelection={handleNavigateToSchoolSelection}
             darkMode={darkMode}
           />
         );
     }
   };
 
-  const showBottomNav = !['settings', 'notifications', 'scrap', 'courseReviews', 'extracurricular'].includes(currentPage);
+  const showBottomNav = !['settings', 'notifications', 'scrap', 'courseReviews', 'extracurricular', 'mypage', 'clubs', 'schoolSelection', 'informationGuide', 'postDetail'].includes(currentPage);
 
   return (
     <AppContainer darkMode={darkMode}>
