@@ -9,6 +9,9 @@ import LoginScreen from './components/LoginScreen';
 import StudentVerification from './components/StudentVerification';
 import MainApp from './components/MainApp';
 
+// Contexts
+import { LanguageProvider } from './contexts/LanguageContext';
+
 // Global Styles
 const AppContainer = styled.div`
   width: 100%;
@@ -54,36 +57,38 @@ function App() {
   };
 
   return (
-    <Router>
-      <AppContainer>
-        <AnimatePresence mode="wait">
-          {currentScreen === 'splash' && (
-            <SplashScreen key="splash" />
-          )}
-          {currentScreen === 'login' && (
-            <LoginScreen 
-              key="login" 
-              onLogin={handleLogin}
-              onNeedVerification={() => setCurrentScreen('verification')}
-            />
-          )}
-          {currentScreen === 'verification' && (
-            <StudentVerification 
-              key="verification"
-              onComplete={handleVerificationComplete}
-              onBack={() => setCurrentScreen('login')}
-            />
-          )}
-          {currentScreen === 'main' && user && (
-            <MainApp 
-              key="main" 
-              user={user} 
-              onLogout={handleLogout}
-            />
-          )}
-        </AnimatePresence>
-      </AppContainer>
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <AppContainer>
+          <AnimatePresence mode="wait">
+            {currentScreen === 'splash' && (
+              <SplashScreen key="splash" />
+            )}
+            {currentScreen === 'login' && (
+              <LoginScreen 
+                key="login" 
+                onLogin={handleLogin}
+                onNeedVerification={() => setCurrentScreen('verification')}
+              />
+            )}
+            {currentScreen === 'verification' && (
+              <StudentVerification 
+                key="verification"
+                onComplete={handleVerificationComplete}
+                onBack={() => setCurrentScreen('login')}
+              />
+            )}
+            {currentScreen === 'main' && user && (
+              <MainApp 
+                key="main" 
+                user={user} 
+                onLogout={handleLogout}
+              />
+            )}
+          </AnimatePresence>
+        </AppContainer>
+      </Router>
+    </LanguageProvider>
   );
 }
 

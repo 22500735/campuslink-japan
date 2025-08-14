@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiHome, FiCalendar, FiMessageSquare, FiMap, FiShoppingBag } from 'react-icons/fi';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Import page components
 import HomePage from './pages/HomePage';
@@ -86,13 +87,14 @@ const MainApp = ({ user, onLogout }) => {
   const [courseReviewInfo, setCourseReviewInfo] = useState(null);
   const [navigationStack, setNavigationStack] = useState(['home']);
   const [scheduleContext, setScheduleContext] = useState(null);
+  const { t } = useLanguage();
 
   const navigationItems = [
-    { id: 'home', label: 'ホーム', icon: FiHome },
-    { id: 'schedule', label: '時間割', icon: FiCalendar },
-    { id: 'board', label: '掲示板', icon: FiMessageSquare },
-    { id: 'map', label: 'マップ', icon: FiMap },
-    { id: 'marketplace', label: '中古取引', icon: FiShoppingBag }
+    { id: 'home', label: t('home'), icon: FiHome },
+    { id: 'schedule', label: t('schedule'), icon: FiCalendar },
+    { id: 'board', label: t('board'), icon: FiMessageSquare },
+    { id: 'map', label: t('map'), icon: FiMap },
+    { id: 'marketplace', label: t('marketplace'), icon: FiShoppingBag }
   ];
 
   const handleNavigateToSettings = () => {

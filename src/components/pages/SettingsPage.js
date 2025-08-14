@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiUser, FiMoon, FiSun, FiMoreHorizontal, FiBell, FiLock, FiHelpCircle, FiLogOut } from 'react-icons/fi';
+import { FiArrowLeft, FiUser, FiMoon, FiSun, FiMoreHorizontal, FiBell, FiLock, FiHelpCircle, FiLogOut, FiGlobe } from 'react-icons/fi';
+import { useLanguage } from '../../contexts/LanguageContext';
+import LanguageSelector from '../LanguageSelector';
 
 const SettingsContainer = styled.div`
   width: 100%;
@@ -171,6 +173,8 @@ const DarkModeItem = styled.div`
 `;
 
 const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
+  const { t } = useLanguage();
+  
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -182,32 +186,48 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
           <BackButton darkMode={darkMode} onClick={onBack}>
             <FiArrowLeft size={20} />
           </BackButton>
-          <HeaderTitle>設定</HeaderTitle>
+          <HeaderTitle>{t('settings')}</HeaderTitle>
         </HeaderTop>
       </Header>
 
       <ContentSection>
         <SettingsGroup>
-          <GroupTitle darkMode={darkMode}>アカウント</GroupTitle>
+          <GroupTitle darkMode={darkMode}>{t('account')}</GroupTitle>
           <SettingsCard darkMode={darkMode}>
             <SettingsItem darkMode={darkMode} isLast>
               <FiUser className="icon" />
               <div className="content">
-                <div className="title">プロフィール設定</div>
-                <div className="subtitle">個人情報と学科情報の管理</div>
+                <div className="title">{t('profileSettings')}</div>
+                <div className="subtitle">{t('profileSettingsDesc')}</div>
               </div>
             </SettingsItem>
           </SettingsCard>
         </SettingsGroup>
 
         <SettingsGroup>
-          <GroupTitle darkMode={darkMode}>アプリ設定</GroupTitle>
+          <GroupTitle darkMode={darkMode}>{t('appSettings')}</GroupTitle>
           <SettingsCard darkMode={darkMode}>
+            <div style={{ padding: '20px', borderBottom: `1px solid ${darkMode ? '#404040' : '#f0f0f0'}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
+                <FiGlobe className="icon" style={{ color: darkMode ? '#4ade80' : '#00A86B' }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '16px', fontWeight: '600', marginBottom: '4px', color: darkMode ? '#ffffff' : '#333' }}>
+                    {t('language')}
+                  </div>
+                  <div style={{ fontSize: '14px', color: darkMode ? '#d1d5db' : '#666' }}>
+                    {t('selectLanguage')}
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginLeft: '40px' }}>
+                <LanguageSelector darkMode={darkMode} showCurrency={true} />
+              </div>
+            </div>
             <DarkModeItem darkMode={darkMode}>
               {darkMode ? <FiMoon className="icon" /> : <FiSun className="icon" />}
               <div className="content">
-                <div className="title">ダークモード</div>
-                <div className="subtitle">ダークテーマに切り替え</div>
+                <div className="title">{t('darkMode')}</div>
+                <div className="subtitle">{t('darkModeDesc')}</div>
               </div>
               <ToggleSwitch 
                 isOn={darkMode} 
@@ -221,15 +241,15 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
             <SettingsItem darkMode={darkMode}>
               <FiBell className="icon" />
               <div className="content">
-                <div className="title">通知設定</div>
-                <div className="subtitle">プッシュ通知とメール設定</div>
+                <div className="title">{t('notifications_settings')}</div>
+                <div className="subtitle">{t('notificationsDesc')}</div>
               </div>
             </SettingsItem>
             <SettingsItem darkMode={darkMode} isLast>
               <FiLock className="icon" />
               <div className="content">
-                <div className="title">プライバシー保護</div>
-                <div className="subtitle">データとプライバシー設定</div>
+                <div className="title">{t('privacy')}</div>
+                <div className="subtitle">{t('privacyDesc')}</div>
               </div>
             </SettingsItem>
           </SettingsCard>
@@ -241,14 +261,14 @@ const SettingsPage = ({ onBack, darkMode, setDarkMode, onLogout }) => {
             <SettingsItem darkMode={darkMode}>
               <FiHelpCircle className="icon" />
               <div className="content">
-                <div className="title">ヘルプとサポート</div>
+                <div className="title">{t('about')}</div>
                 <div className="subtitle">FAQ とお問い合わせ</div>
               </div>
             </SettingsItem>
             <SettingsItem darkMode={darkMode} isLast onClick={onLogout}>
               <FiLogOut className="icon" />
               <div className="content">
-                <div className="title">ログアウト</div>
+                <div className="title">{t('logout')}</div>
                 <div className="subtitle">アカウントからログアウト</div>
               </div>
             </SettingsItem>

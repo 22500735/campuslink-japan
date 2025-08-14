@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiUser, FiTrendingUp, FiStar, FiBriefcase, FiCalendar, FiBell, FiSettings, FiLogOut, FiTruck, FiBook, FiHome as FiHomeIcon, FiBookmark, FiMessageCircle, FiHeart, FiExternalLink } from 'react-icons/fi';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const HomeContainer = styled.div`
   width: 100%;
@@ -278,15 +279,16 @@ const ReviewCard = styled(Card)`
 `;
 
 const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotifications, onNavigateToScrap, onNavigateToBoard, onNavigateToCourseReviews, onNavigateToExtracurricular, darkMode }) => {
+  const { t, currentLanguage } = useLanguage();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [scrapedPosts, setScrapedPosts] = useState(new Set());
 
   const quickActions = [
-    { icon: FiCalendar, label: '時間割', action: () => {} },
-    { icon: FiBell, label: '通知', action: () => onNavigateToNotifications && onNavigateToNotifications() },
-    { icon: FiBookmark, label: 'スクラップ', action: () => onNavigateToScrap && onNavigateToScrap() },
-    { icon: FiTruck, label: '中古取引', action: () => {} },
-    { icon: FiBook, label: '講義評価', action: () => {} }
+    { icon: FiCalendar, label: t('schedule'), action: () => {} },
+    { icon: FiBell, label: t('notifications'), action: () => onNavigateToNotifications && onNavigateToNotifications() },
+    { icon: FiBookmark, label: t('scrap'), action: () => onNavigateToScrap && onNavigateToScrap() },
+    { icon: FiTruck, label: t('marketplace'), action: () => {} },
+    { icon: FiBook, label: t('courseReviews'), action: () => {} }
   ];
 
   const popularPosts = [
@@ -368,8 +370,8 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
               <FiUser size={24} />
             </div>
             <div className="info">
-              <h3>{user?.name || '学生'}</h3>
-              <p>青山学院大学</p>
+              <h3>{user?.name || (currentLanguage === 'ja' ? '学生' : currentLanguage === 'en' ? 'Student' : '학생')}</h3>
+              <p>{currentLanguage === 'ja' ? '青山学院大学 情報技術学科' : currentLanguage === 'en' ? 'Aoyama Gakuin University Information Technology' : '아오야마 가쿠인 대학교 정보기술학과'}</p>
             </div>
           </UserProfile>
           <HeaderActions>
@@ -400,7 +402,7 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
       <ContentSection>
         <SectionTitle darkMode={darkMode}>
           <FiTrendingUp />
-          リアルタイム人気投稿
+          {currentLanguage === 'ja' ? 'リアルタイム人気投稿' : currentLanguage === 'en' ? 'Popular Posts' : '인기 게시글'}
         </SectionTitle>
         {popularPosts.map((post) => (
           <PostCard
@@ -448,7 +450,7 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
 
         <SectionTitle darkMode={darkMode}>
           <FiStar />
-          最新講義評価
+          {t('courseReviews')}
         </SectionTitle>
         {recentReviews.map((review) => (
           <ReviewCard 
@@ -457,6 +459,8 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
             onClick={() => onNavigateToCourseReviews && onNavigateToCourseReviews(review.course, review.id)}
             style={{ cursor: 'pointer' }}
           >
+            <div className="icon"><FiBriefcase /></div>
+            <div className="label">{currentLanguage === 'ja' ? '就活' : currentLanguage === 'en' ? 'Career' : '취업'}</div>
             <div className="course">{review.course}</div>
             <div className="professor">{review.professor}</div>
             <div className="rating">
@@ -472,7 +476,7 @@ const HomePage = ({ user, onLogout, onNavigateToSettings, onNavigateToNotificati
 
         <SectionTitle darkMode={darkMode}>
           <FiBriefcase />
-          課外活動・就職情報
+          {currentLanguage === 'ja' ? '課外活動・就職情報' : currentLanguage === 'en' ? 'Activities & Career Info' : '과외활동 및 취업정보'}
         </SectionTitle>
         <Card 
           darkMode={darkMode}

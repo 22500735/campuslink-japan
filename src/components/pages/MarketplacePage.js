@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiSearch, FiPlus, FiHeart, FiMessageCircle, FiFilter, FiBookOpen, FiTag, FiUser, FiClock, FiBell, FiSettings, FiX, FiPhone, FiMail, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useLanguage } from '../../contexts/LanguageContext';
 import SellProductPage from './SellProductPage';
 import NotificationSettingsPage from './NotificationSettingsPage';
 
@@ -674,8 +675,9 @@ const ContactButton = styled.button`
 `;
 
 const MarketplacePage = ({ user, darkMode = false }) => {
+  const { t, formatPrice, currentLanguage } = useLanguage();
   const [currentView, setCurrentView] = useState('marketplace');
-  const [activeCategory, setActiveCategory] = useState('全て');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [likedItems, setLikedItems] = useState(new Set());
   const [priceChangeNotification, setPriceChangeNotification] = useState('');
@@ -689,14 +691,14 @@ const MarketplacePage = ({ user, darkMode = false }) => {
   });
 
   const categories = [
-    { id: 'all', name: '全て' },
-    { id: 'books', name: '教科書' },
-    { id: 'electronics', name: '電子機器' },
-    { id: 'stationery', name: '文房具' },
-    { id: 'furniture', name: '家具・生活用品' },
-    { id: 'clothing', name: '衣類・靴' },
-    { id: 'instruments', name: '楽器' },
-    { id: 'other', name: 'その他' }
+    { id: 'all', name: t('allCategories') },
+    { id: 'books', name: t('books') },
+    { id: 'electronics', name: t('electronics') },
+    { id: 'stationery', name: t('others') },
+    { id: 'furniture', name: t('furniture') },
+    { id: 'clothing', name: t('clothing') },
+    { id: 'instruments', name: t('others') },
+    { id: 'other', name: t('others') }
   ];
 
   const toggleLike = (productId) => {
@@ -709,7 +711,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
         // 관심 상품 등록 시 가격 변동 알림 설정
         const product = products.find(p => p.id === productId);
         if (product) {
-          setPriceChangeNotification(`${product.title}の価格変動通知が設定されました。`);
+          setPriceChangeNotification(currentLanguage === 'ja' ? `${product.title}の価格変動通知が設定されました。` : currentLanguage === 'en' ? `Price alert set for ${product.title}.` : `${product.title}의 가격 변동 알림이 설정되었습니다.`);
           setTimeout(() => setPriceChangeNotification(''), 3000);
         }
       }
@@ -725,9 +727,9 @@ const MarketplacePage = ({ user, darkMode = false }) => {
 
   const handleContactSeller = (method) => {
     if (method === 'chat') {
-      alert('チャット機能は準備中です。');
+      alert(currentLanguage === 'ja' ? 'チャット機能は準備中です。' : currentLanguage === 'en' ? 'Chat feature is under development.' : '채팅 기능은 준비 중입니다.');
     } else if (method === 'phone') {
-      alert('電話接続機能は準備中です。');
+      alert(currentLanguage === 'ja' ? '電話接続機能は準備中です。' : currentLanguage === 'en' ? 'Phone feature is under development.' : '전화 연결 기능은 준비 중입니다.');
     }
   };
 
@@ -746,63 +748,63 @@ const MarketplacePage = ({ user, darkMode = false }) => {
     {
       id: 1,
       title: 'iPhone 13 Pro 128GB',
-      price: '￥85,000',
+      price: 85000,
       image: '📱',
-      seller: '田中学生',
-      time: '2時間前',
+      seller: currentLanguage === 'ja' ? '田中学生' : currentLanguage === 'en' ? 'John Smith' : '김철수',
+      time: currentLanguage === 'ja' ? '2時間前' : currentLanguage === 'en' ? '2 hours ago' : '2시간 전',
       likes: 12,
       views: 45,
       category: 'electronics',
       condition: 4,
-      description: '使用期間1年未満のiPhone 13 Proです。傷やスクラッチなしできれいに使用していました。箱、充電器、イヤホンすべて付属しています。',
+      description: currentLanguage === 'ja' ? '使用期間1年未満のiPhone 13 Proです。傷やスクラッチなしできれいに使用していました。箱、充電器、イヤホンすべて付属しています。' : currentLanguage === 'en' ? 'iPhone 13 Pro used for less than 1 year. Used cleanly without scratches. Box, charger, and earphones all included.' : '1년 미만 사용한 iPhone 13 Pro입니다. 스크래치 없이 깨끗하게 사용했습니다. 박스, 충전기, 이어폰 모두 포함됩니다.',
       sold: false
     },
     {
       id: 2,
-      title: 'データ構造とアルゴリズム 教科書',
-      price: '￥2,500',
+      title: currentLanguage === 'ja' ? 'データ構造とアルゴリズム 教科書' : currentLanguage === 'en' ? 'Data Structures and Algorithms Textbook' : '자료구조와 알고리즘 교재',
+      price: 2500,
       image: '📚',
-      seller: '佐藤学生',
-      time: '5時間前',
+      seller: currentLanguage === 'ja' ? '佐藤学生' : currentLanguage === 'en' ? 'Sarah Johnson' : '이영희',
+      time: currentLanguage === 'ja' ? '5時間前' : currentLanguage === 'en' ? '5 hours ago' : '5시간 전',
       likes: 8,
       views: 23,
       category: 'books',
       condition: 3,
-      description: '情報テクノロジー学科の専攻科目で使用した教科書です。書き込みはありますが、全体的にきれい状態です。',
+      description: currentLanguage === 'ja' ? '情報テクノロジー学科の専攻科目で使用した教科書です。書き込みはありますが、全体的にきれい状態です。' : currentLanguage === 'en' ? 'Textbook used for Information Technology major course. Has some writing but overall in good condition.' : '정보기술학과 전공과목에서 사용한 교재입니다. 필기가 있지만 전체적으로 깨끗한 상태입니다.',
       sold: false
     },
     {
       id: 3,
-      title: 'ノートPCスタンド',
-      price: '￥1,500',
+      title: currentLanguage === 'ja' ? 'ノートPCスタンド' : currentLanguage === 'en' ? 'Laptop Stand' : '노트북 스탠드',
+      price: 1500,
       image: '💻',
-      seller: '山田学生',
-      time: '1日前',
+      seller: currentLanguage === 'ja' ? '山田学生' : currentLanguage === 'en' ? 'Mike Wilson' : '박민수',
+      time: currentLanguage === 'ja' ? '1日前' : currentLanguage === 'en' ? '1 day ago' : '1일 전',
       likes: 5,
       views: 18,
       category: 'furniture',
       condition: 4,
-      description: '高さ調節可能なノートPCスタンドです。使用感がほとんどなく、新品同様です。',
+      description: currentLanguage === 'ja' ? '高さ調節可能なノートPCスタンドです。使用感がほとんどなく、新品同様です。' : currentLanguage === 'en' ? 'Height-adjustable laptop stand. Almost no signs of use, like new.' : '높이 조절 가능한 노트북 스탠드입니다. 사용감이 거의 없어 새것 같습니다.',
       sold: true
     },
     {
       id: 4,
-      title: 'ナイキ エアマックス 27.0cm',
-      price: '￥12,000',
+      title: currentLanguage === 'ja' ? 'ナイキ エアマックス 27.0cm' : currentLanguage === 'en' ? 'Nike Air Max 27.0cm' : '나이키 에어맥스 27.0cm',
+      price: 12000,
       image: '👟',
-      seller: '高橋学生',
-      time: '2日前',
+      seller: currentLanguage === 'ja' ? '高橋学生' : currentLanguage === 'en' ? 'David Lee' : '최민호',
+      time: currentLanguage === 'ja' ? '2日前' : currentLanguage === 'en' ? '2 days ago' : '2일 전',
       likes: 15,
       views: 67,
       category: 'clothing',
       condition: 3,
-      description: 'サイズ27.0cmのナイキ エアマックスです。着用回数10回未満でほぼ新品です。',
+      description: currentLanguage === 'ja' ? 'サイズ27.0cmのナイキ エアマックスです。着用回数10回未満でほぼ新品です。' : currentLanguage === 'en' ? 'Nike Air Max size 27.0cm. Worn less than 10 times, almost new.' : '사이즈 27.0cm 나이키 에어맥스입니다. 착용 횟수 10회 미만으로 거의 새것입니다.',
       sold: false
     }
   ];
 
   const filteredProducts = products.filter(product => {
-    const categoryMatch = activeCategory === '全て' || product.category === categories.find(cat => cat.name === activeCategory)?.id;
+    const categoryMatch = activeCategory === 'all' || product.category === activeCategory;
     const searchMatch = searchQuery === '' || 
       product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -831,15 +833,15 @@ const MarketplacePage = ({ user, darkMode = false }) => {
     <MarketplaceContainer darkMode={darkMode}>
       <Header darkMode={darkMode}>
         <HeaderContent>
-          <Title>中古取引</Title>
+          <Title>{t('marketplace')}</Title>
           <HeaderActions>
-            <NotificationButton onClick={() => setCurrentView('notifications')}>
+            <NotificationButton onClick={() => setCurrentView('notifications')} title={t('priceNotification')}>
               <FiBell size={16} />
               {likedItems.size > 0 && <NotificationBadge />}
             </NotificationButton>
             <SellButton onClick={() => setCurrentView('sell')}>
               <FiPlus size={16} />
-              出品する
+              {t('sellProduct')}
             </SellButton>
           </HeaderActions>
         </HeaderContent>
@@ -849,7 +851,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
             <FiSearch size={20} />
           </SearchIcon>
           <SearchInput
-            placeholder="商品名、カテゴリで検索..."
+            placeholder={t('searchProducts')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -859,8 +861,8 @@ const MarketplacePage = ({ user, darkMode = false }) => {
           {categories.map((category) => (
             <CategoryTab
               key={category.id}
-              active={activeCategory === category.name}
-              onClick={() => setActiveCategory(category.name)}
+              active={activeCategory === category.id}
+              onClick={() => setActiveCategory(category.id)}
             >
               {category.name}
             </CategoryTab>
@@ -886,10 +888,10 @@ const MarketplacePage = ({ user, darkMode = false }) => {
         <FilterBar>
           <FilterToggleButton darkMode={darkMode} onClick={() => setShowFilterModal(true)}>
             <FiFilter size={16} />
-            フィルター
+            {t('filter')}
           </FilterToggleButton>
           <span style={{ fontSize: '14px', color: darkMode ? '#aaa' : '#666' }}>
-            合計 {filteredProducts.length}個の商品
+            {t('totalPosts')}: {filteredProducts.length}
           </span>
         </FilterBar>
 
@@ -904,8 +906,8 @@ const MarketplacePage = ({ user, darkMode = false }) => {
             >
               <ProductImage>
                 <span style={{ fontSize: '64px' }}>{product.image}</span>
-                {product.sold && <ProductBadge sold>販売完了</ProductBadge>}
-                {!product.sold && <ProductBadge>販売中</ProductBadge>}
+                {product.sold && <ProductBadge sold>{t('sold')}</ProductBadge>}
+                {!product.sold && <ProductBadge>{t('available')}</ProductBadge>}
                 <LikeButton
                   liked={likedItems.has(product.id)}
                   onClick={(e) => {
@@ -920,7 +922,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
               <ProductInfo>
                 <ProductTitle darkMode={darkMode}>{product.title}</ProductTitle>
                 <ProductPrice>
-                  {product.price}
+                  {formatPrice(product.price)}
                   {product.originalPrice && (
                     <span style={{ 
                       fontSize: '14px', 
@@ -987,14 +989,14 @@ const MarketplacePage = ({ user, darkMode = false }) => {
             onClick={(e) => e.stopPropagation()}
           >
           <FilterModalHeader darkMode={darkMode}>
-            <FilterModalTitle darkMode={darkMode}>フィルター設定</FilterModalTitle>
+            <FilterModalTitle darkMode={darkMode}>{t('filter')}</FilterModalTitle>
             <CloseButton darkMode={darkMode} onClick={() => setShowFilterModal(false)}>
               <FiX size={20} />
             </CloseButton>
           </FilterModalHeader>
 
           <FilterSection darkMode={darkMode}>
-            <FilterSectionTitle darkMode={darkMode}>価格範囲</FilterSectionTitle>
+            <FilterSectionTitle darkMode={darkMode}>{t('priceRange')}</FilterSectionTitle>
             <RangeSlider>
               <SliderContainer darkMode={darkMode}>
                 <SliderTrack 
@@ -1005,14 +1007,14 @@ const MarketplacePage = ({ user, darkMode = false }) => {
                 <SliderThumb left={(filters.priceRange[1] / 100000) * 100} />
               </SliderContainer>
               <RangeValues darkMode={darkMode}>
-                <span>¥{filters.priceRange[0].toLocaleString()}</span>
-                <span>¥{filters.priceRange[1].toLocaleString()}</span>
+                <span>{formatPrice(filters.priceRange[0])}</span>
+                <span>{formatPrice(filters.priceRange[1])}</span>
               </RangeValues>
             </RangeSlider>
           </FilterSection>
 
           <FilterSection darkMode={darkMode}>
-            <FilterSectionTitle darkMode={darkMode}>商品状態</FilterSectionTitle>
+            <FilterSectionTitle darkMode={darkMode}>{t('condition')}</FilterSectionTitle>
             <RangeSlider>
               <SliderContainer darkMode={darkMode}>
                 <SliderTrack 
@@ -1023,18 +1025,18 @@ const MarketplacePage = ({ user, darkMode = false }) => {
                 <SliderThumb left={((filters.conditionRange[1] - 1) / 4) * 100} />
               </SliderContainer>
               <RangeValues darkMode={darkMode}>
-                <span>状態 {filters.conditionRange[0]}</span>
-                <span>状態 {filters.conditionRange[1]}</span>
+                <span>{t('condition')} {filters.conditionRange[0]}</span>
+                <span>{t('condition')} {filters.conditionRange[1]}</span>
               </RangeValues>
             </RangeSlider>
           </FilterSection>
 
           <FilterButtons darkMode={darkMode}>
             <FilterActionButton darkMode={darkMode} onClick={resetFilters}>
-              リセット
+              {t('cancel')}
             </FilterActionButton>
             <FilterActionButton primary darkMode={darkMode} onClick={applyFilters}>
-              適用
+              {t('confirm')}
             </FilterActionButton>
           </FilterButtons>
         </FilterModalContainer>
@@ -1057,7 +1059,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <ProductDetailHeader darkMode={darkMode}>
-            <FilterModalTitle darkMode={darkMode}>상품 상세</FilterModalTitle>
+            <FilterModalTitle darkMode={darkMode}>{t('contactSeller')}</FilterModalTitle>
             <CloseButton darkMode={darkMode} onClick={() => setShowProductDetail(false)}>
               <FiX size={20} />
             </CloseButton>
@@ -1093,7 +1095,7 @@ const MarketplacePage = ({ user, darkMode = false }) => {
               {selectedProduct.title}
             </ProductDetailTitle>
             <ProductDetailPrice>
-              {selectedProduct.price}
+              {formatPrice(selectedProduct.price)}
             </ProductDetailPrice>
             <ProductDetailDescription darkMode={darkMode}>
               {selectedProduct.description}
@@ -1108,11 +1110,11 @@ const MarketplacePage = ({ user, darkMode = false }) => {
                 <ContactButtons>
                   <ContactButton primary onClick={() => handleContactSeller('chat')}>
                     <FiMessageCircle size={14} />
-                    チャットする
+                    {t('chatWithSeller')}
                   </ContactButton>
                   <ContactButton darkMode={darkMode} onClick={() => handleContactSeller('phone')}>
                     <FiPhone size={14} />
-                    連絡する
+                    {t('callSeller')}
                   </ContactButton>
                 </ContactButtons>
               </SellerHeader>
